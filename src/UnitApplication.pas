@@ -170,7 +170,7 @@ begin
 
  fDebuggerPort:=-1; // -1 means no debugger
 
- fCountCPUCores:=1;
+ fCountCPUCores:=2;
 
  fMemorySize:=TpvUInt64(2) shl 30; // 2 GiB
 

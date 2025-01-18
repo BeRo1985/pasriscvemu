@@ -28,7 +28,25 @@ Just open the `pasriscvemu.lpi` in Lazarus or 'pasriscvemu.dproj' in Delphi and 
 
 ### Running
 
-Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look into the UnitApplication.pas file for the command line options.
+Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look below for the command line options.
+
+### Command Line Options
+
+| Command Line                  | Default                                                                      | Description                                                    |
+|-------------------------------|------------------------------------------------------------------------------|----------------------------------------------------------------|
+| -debug [port]                 | `-1`                                                                         | Enable GDB remote debugging on port                            |
+| -smp [cpucores]               | `2`                                                                          | Number of CPU cores to emulate                                 |
+| -memory [ram]                 | `2GiB`                                                                       | Amount of RAM to emulate                                       |
+| -bios [filename]              | `fw_jump.bin`                                                                | Filename of the BIOS firmware image                            |
+| -kernel [filename]            | `kernel.bin`                                                                 | Filename of the kernel image                                   |
+| -no-kernel                    |                                                                              | Do not load a kernel image                                     |
+| -initrd [filename]            |                                                                              | Filename of the initial ramdisk image                          |
+| -no-initrd                    |                                                                              | Do not load an initial ramdisk image                           |
+| -virtioblock [filename]       |                                                                              | Filename of the VirtIO block device image                      |
+| -no-virtioblock               |                                                                              | Do not load a VirtIO block device image                        |
+| -nvme [filename]              |                                                                              | Filename of the NVMe block device image                        |
+| -no-nvme                      |                                                                              | Do not load a NVMe block device image                          |
+| -bootargs [bootparams]        | `root=/dev/mem rw earlyprintk console=$LINUXUART$ console=tty0 earlycon=sbi` | Boot arguments for the kernel                                  |
 
 ### Keys
 
@@ -52,7 +70,7 @@ Because pasriscvemu is a separate project and not directly related to Vulkan, bu
 - [PasMP](https://github.com/Bero1985/pasmp) - A parallel-processing/multi-processing library for Object Pascal
 - [RNL](https://github.com/Bero1985/rnl) - RNL - Realtime Network Library - The opensource reliable UDP network library, including cryptography, which is used by PasRISCV for various purposes
 - And more at [here](https://github.com/Bero1985)
- 
+
 ### License
 
 This project is licensed under the zlib License - see the [LICENSE](LICENSE) file for details.
