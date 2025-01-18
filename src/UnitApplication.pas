@@ -24,6 +24,7 @@ uses SysUtils,
      Classes,
      Math,
      Vulkan,
+     PasDblStrUtils,
      PasVulkan.Types,
      PasVulkan.Math,
      PasVulkan.Framework,
@@ -36,6 +37,7 @@ type TApplication=class(TpvApplication)
       private
        fDebuggerPort:TpvInt32;
        fCountCPUCores:TpvSizeInt;
+       fMemorySize:TpvUInt64;
        fBIOSFileName:TpvUTF8String;
        fKernelFileName:TpvUTF8String;
        fInitrdFileName:TpvUTF8String;
@@ -60,6 +62,7 @@ type TApplication=class(TpvApplication)
       published
        property DebuggerPort:TpvInt32 read fDebuggerPort write fDebuggerPort;
        property CountCPUCores:TpvSizeInt read fCountCPUCores write fCountCPUCores;
+       property MemorySize:TpvUInt64 read fMemorySize write fMemorySize;
        property BIOSFileName:TpvUTF8String read fBIOSFileName write fBIOSFileName;
        property KernelFileName:TpvUTF8String read fKernelFileName write fKernelFileName;
        property InitrdFileName:TpvUTF8String read fInitrdFileName write fInitrdFileName;
@@ -74,6 +77,89 @@ implementation
 
 uses UnitScreenEmulator;
 
+// Converts a human readable amount string (b, kb, kib, mb, mib, gb, gib, tb, tib) to a size, and if unit-less, assume bytes
+function AmountToSize(const aAmount:TpvRawByteString;const aDefault:TpvUInt64):TpvUInt64;
+var Index:TpvSizeInt;
+    Value,Digits,FracValue,FracDigits,FracTenPower,Factor:TpvUInt64;
+    UnitString:TpvRawByteString;    
+begin
+
+ Index:=1; 
+
+ // Skip whitespace
+ while (Index<=length(aAmount)) and (aAmount[Index] in [#1..#32]) do begin
+  inc(Index);
+ end;
+
+ // Search unit string
+ Value:=0;
+ Digits:=0;
+ while (Index<=length(aAmount)) and (aAmount[Index] in ['0'..'9']) do begin
+  Value:=(Value*10)+(ord(aAmount[Index])-ord('0'));
+  inc(Digits);
+  inc(Index);
+ end;
+ if (Index<=length(aAmount)) and (aAmount[Index]='.') then begin
+  inc(Index);
+  FracDigits:=0;
+  FracValue:=0;
+  FracTenPower:=1;
+  while (Index<=length(aAmount)) and (aAmount[Index] in ['0'..'9']) do begin
+   FracValue:=(FracValue*10)+(ord(aAmount[Index])-ord('0'));
+   FracTenPower:=FracTenPower*10;
+   inc(FracDigits);
+   inc(Digits);
+   inc(Index);
+  end;
+ end else begin
+  FracValue:=0;
+  FracDigits:=0;
+ end;
+
+ // Skip whitespace
+ while (Index<=length(aAmount)) and (aAmount[Index] in [#1..#32]) do begin
+  inc(Index);
+ end;
+
+ // Get unit string
+ UnitString:='';
+ while (Index<=length(aAmount)) and not (aAmount[Index] in ['a'..'z','A'..'Z']) do begin
+  UnitString:=UnitString+aAmount[Index];
+  inc(Index);
+ end;
+ UnitString:=LowerCase(UnitString);
+
+ if UnitString='kb' then begin
+  Factor:=TpvUInt64(1000);
+ end else if UnitString='kib' then begin
+  Factor:=TpvUInt64(1024); 
+ end else if UnitString='mb' then begin
+  Factor:=TpvUInt64(1000000);
+ end else if UnitString='mib' then begin
+  Factor:=TpvUInt64(1048576);
+ end else if UnitString='gb' then begin
+  Factor:=TpvUInt64(1000000000);
+ end else if UnitString='gib' then begin
+  Factor:=TpvUInt64(1073741824);
+ end else if UnitString='tb' then begin
+  Factor:=TpvUInt64(1000000000000);
+ end else if UnitString='tib' then begin
+  Factor:=TpvUInt64(1099511627776);
+ end else begin
+  Factor:=TpvUInt64(1);
+ end;
+
+ if Digits>0 then begin
+  result:=Value*Factor;
+  if FracDigits>0 then begin
+   result:=result+((FracValue*Factor) div FracTenPower);
+  end;
+ end else begin
+  result:=aDefault;
+ end;
+
+end;
+
 constructor TApplication.Create;
 var Index,Count:TpvSizeInt;
     Parameter:String; 
@@ -85,6 +171,8 @@ begin
  fDebuggerPort:=-1; // -1 means no debugger
 
  fCountCPUCores:=1;
+
+ fMemorySize:=TpvUInt64(2) shl 30; // 2 GiB
 
  fBIOSFileName:='fw_jump.bin';
 
@@ -116,6 +204,11 @@ begin
    end else if (Parameter='smp') or (Parameter='cpucores') then begin
     if Index<=Count then begin
      fCountCPUCores:=Max(StrToIntDef(ParamStr(Index),1),1);
+     inc(Index);
+    end;
+   end else if (Parameter='memory') or (Parameter='ram') or (Parameter='mem') then begin
+    if Index<=Count then begin
+     fMemorySize:=AmountToSize(ParamStr(Index),TpvUInt64(2) shl 30);
      inc(Index);
     end;
    end else if Parameter='bios' then begin
