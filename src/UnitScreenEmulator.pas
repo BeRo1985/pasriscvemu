@@ -95,7 +95,7 @@ type { TMachineInstance }
       public
       private
        fGraphicsFrameBuffer:TMachineInstance.TFrameBuffer;
-       fTerminalFrameBuffer:TMachineInstance.TFrameBuffer;
+       fSerialConsoleTerminalFrameBuffer:TMachineInstance.TFrameBuffer;
        fFrameBuffers:array[0..MaxInFlightFrames-1] of TMachineInstance.TFrameBuffer;
        fFrameBufferTextures:array[0..MaxInFlightFrames-1] of TpvVulkanTexture;
        fFrameBufferGeneration:TpvUInt64;
@@ -121,8 +121,8 @@ type { TMachineInstance }
        fVulkanCanvas:TpvCanvas;
 //     fVulkanFont:TpvFont;
        fReady:boolean;
-       fLastTerminalMode:Boolean;
-       fTerminalMode:Boolean;
+       fLastSerialConsoleMode:Boolean;
+       fSerialConsoleMode:Boolean;
        fMouseButtons:TpvUInt32;
        fSelectedIndex:TpvInt32;
        fStartY:TpvFloat;
@@ -1700,8 +1700,8 @@ begin
  inherited Create;
  fSelectedIndex:=-1;
  fReady:=false;
- fTerminalMode:=true;
- fLastTerminalMode:=not fTerminalMode;
+ fSerialConsoleMode:=false;
+ fLastSerialConsoleMode:=not fSerialConsoleMode;
  fMouseButtons:=0;
  fTime:=0.48;
  fTerm:=TPasTerm.Create(80,25);
@@ -1725,7 +1725,7 @@ procedure TScreenEmulator.DrawBackground(const aSender:TPasTerm);
 var Index:TpvSizeInt;
 begin
  for Index:=0 to (TMachineInstance.ScreenWidth*TMachineInstance.ScreenHeight)-1 do begin
-  fTerminalFrameBuffer[Index]:=TpvUInt32($ff000000);
+  fSerialConsoleTerminalFrameBuffer[Index]:=TpvUInt32($ff000000);
  end;
 end;
 
@@ -1754,7 +1754,7 @@ begin
         end else begin
          Color:=aCodePoint.BackgroundColor;
         end;
-        fTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
+        fSerialConsoleTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
        end;
       end;
      end;
@@ -1772,7 +1772,7 @@ begin
         end else begin
          Color:=aCodePoint.BackgroundColor;
         end;
-        fTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
+        fSerialConsoleTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
        end;
       end;
      end;
@@ -1786,7 +1786,7 @@ begin
       oy:=BaseY+y;
       for x:=0 to 7 do begin
        ox:=BaseX+x;
-       fTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
+       fSerialConsoleTerminalFrameBuffer[(oy*TMachineInstance.ScreenWidth)+ox]:=Color or $ff000000;
       end;
      end;
     end;
@@ -2192,7 +2192,7 @@ begin
    KEYCODE_F12:begin
     case aKeyEvent.KeyEventType of
      TpvApplicationInputKeyEventType.Down:begin
-      fTerminalMode:=not fTerminalMode;
+      fSerialConsoleMode:=not fSerialConsoleMode;
      end;
     end;
     result:=true;
@@ -2200,7 +2200,7 @@ begin
    end;
   end;
  end;
- if fTerminalMode then begin
+ if fSerialConsoleMode then begin
   case aKeyEvent.KeyEventType of
    TpvApplicationInputKeyEventType.Typed:begin
     v:=0;
@@ -2507,7 +2507,7 @@ var Index:TpvInt32;
 begin
  result:=false;
  if fReady then begin
-  if fTerminalMode then begin
+  if fSerialConsoleMode then begin
    case aPointerEvent.PointerEventType of
     TpvApplicationInputPointerEventType.Down:begin
     end;
@@ -2610,7 +2610,7 @@ end;
 function TScreenEmulator.Scrolled(const aRelativeAmount:TpvVector2):boolean;
 begin
  result:=false;
- if fReady and not fTerminalMode then begin
+ if fReady and not fSerialConsoleMode then begin
   if assigned(fMachineInstance.fMachine.PS2MouseDevice) then begin
    fMachineInstance.fMachine.PS2MouseDevice.Scroll(round(abs(aRelativeAmount.x)+abs(aRelativeAmount.y)));
   end;
@@ -2697,8 +2697,8 @@ begin
   fTerminalFrameBufferSnapshot.Update;
   FrameBufferGenerationDirty:=true;
  end;
- if fLastTerminalMode<>fTerminalMode then begin
-  fLastTerminalMode:=fTerminalMode;
+ if fLastSerialConsoleMode<>fSerialConsoleMode then begin
+  fLastSerialConsoleMode:=fSerialConsoleMode;
   FrameBufferGenerationDirty:=true;
  end;
  if FrameBufferGenerationDirty then begin
@@ -2706,8 +2706,8 @@ begin
  end;
  if fFrameBufferGenerations[pvApplication.UpdateInFlightFrameIndex]<>fFrameBufferGeneration then begin
   fFrameBufferGenerations[pvApplication.UpdateInFlightFrameIndex]:=fFrameBufferGeneration;
-  if fTerminalMode then begin
-   fFrameBuffers[pvApplication.UpdateInFlightFrameIndex]:=fTerminalFrameBuffer;
+  if fSerialConsoleMode then begin
+   fFrameBuffers[pvApplication.UpdateInFlightFrameIndex]:=fSerialConsoleTerminalFrameBuffer;
   end else begin
    fFrameBuffers[pvApplication.UpdateInFlightFrameIndex]:=fGraphicsFrameBuffer;
   end;
