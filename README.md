@@ -71,6 +71,10 @@ Because pasriscvemu is a separate project and not directly related to Vulkan, bu
 - [RNL](https://github.com/Bero1985/rnl) - RNL - Realtime Network Library - The opensource reliable UDP network library, including cryptography, which is used by PasRISCV for various purposes
 - And more at [here](https://github.com/Bero1985)
 
+### Support
+
+Creating is my passion, and with your support, I can keep it alive. Support my work and help me continue innovating. Every contribution makes a difference: [Donate](https://donate.rosseaux.com/) Thank you!
+
 ### License
 
 This project is licensed under the zlib License - see the [LICENSE](LICENSE) file for details.
