@@ -97,6 +97,7 @@ type { TMachineInstance }
        fGraphicsFrameBuffer:TMachineInstance.TFrameBuffer;
        fSerialConsoleTerminalFrameBuffer:TMachineInstance.TFrameBuffer;
        fFrameBuffers:array[0..MaxInFlightFrames-1] of TMachineInstance.TFrameBuffer;
+       fFrameBufferTextureBuffers:array[0..MaxInFlightFrames-1] of TpvVulkanBuffer;
        fFrameBufferTextures:array[0..MaxInFlightFrames-1] of TpvVulkanTexture;
        fFrameBufferGeneration:TpvUInt64;
        fFrameBufferGenerations:array[0..MaxInFlightFrames-1] of TpvUInt64;
@@ -106,6 +107,7 @@ type { TMachineInstance }
        procedure DrawCodePoint(const aSender:TPasTerm;const aCodePoint:TPasTerm.TFrameBufferCodePoint;const aColumn,aRow:TPasTermSizeInt);
        procedure DrawCursor(const aSender:TPasTerm;const aColumn,aRow:TPasTermSizeInt);
       private
+       fVulkanDevice:TpvVulkanDevice;
        fVulkanGraphicsCommandPool:TpvVulkanCommandPool;
        fVulkanGraphicsCommandBuffer:TpvVulkanCommandBuffer;
        fVulkanGraphicsCommandBufferFence:TpvVulkanFence;
@@ -1698,6 +1700,7 @@ end;
 constructor TScreenEmulator.Create;
 begin
  inherited Create;
+ fVulkanDevice:=pvApplication.VulkanDevice;
  fSelectedIndex:=-1;
  fReady:=false;
  fSerialConsoleMode:=false;
@@ -1854,7 +1857,21 @@ begin
                                                      VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE);
 
  for Index:=0 to pvApplication.CountInFlightFrames-1 do begin
-  fFrameBufferTextures[Index]:=TpvVulkanTexture.CreateFromMemory(pvApplication.VulkanDevice,
+  fFrameBufferTextures[Index]:=TpvVulkanTexture.CreateSimple2DTarget(pvApplication.VulkanDevice,
+                                                                     pvApplication.VulkanDevice.GraphicsQueue,
+                                                                     fVulkanGraphicsCommandBuffer,
+                                                                     fVulkanGraphicsCommandBufferFence,
+                                                                     true,
+                                                                     VK_FORMAT_R8G8B8A8_SRGB,
+                                                                     VK_FORMAT_UNDEFINED,
+                                                                     TMachineInstance.ScreenWidth,
+                                                                     TMachineInstance.ScreenHeight,
+                                                                     [TpvVulkanTextureUsageFlag.General,TpvVulkanTextureUsageFlag.Sampled,TpvVulkanTextureUsageFlag.TransferDst,TpvVulkanTextureUsageFlag.TransferSrc],
+                                                                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                                                     0,
+                                                                     'TGameComputerCore.FrameBufferTextures['+IntToStr(Index)+']'
+                                                                    );
+{ fFrameBufferTextures[Index]:=TpvVulkanTexture.CreateFromMemory(pvApplication.VulkanDevice,
                                                                  pvApplication.VulkanDevice.GraphicsQueue,
                                                                  fVulkanGraphicsCommandBuffer,
                                                                  fVulkanGraphicsCommandBufferFence,
@@ -1878,11 +1895,28 @@ begin
                                                                  true,
                                                                  false,
                                                                  true,
-                                                                 0);
+                                                                 0);}
   fFrameBufferTextures[Index].Sampler:=fFrameBufferTextureSampler;
   fFrameBufferTextures[Index].UpdateDescriptorImageInfo;
   fFrameBufferGenerations[Index]:=High(TpvUInt64);
   fFrameBufferTextureGenerations[Index]:=High(TpvUInt64);
+  fFrameBufferTextureBuffers[Index]:=TpvVulkanBuffer.Create(pvApplication.VulkanDevice,
+                                                            SizeOf(TMachineInstance.TFrameBuffer),
+                                                            TVkBufferUsageFlags(VK_BUFFER_USAGE_TRANSFER_DST_BIT) or TVkBufferUsageFlags(VK_BUFFER_USAGE_TRANSFER_SRC_BIT),
+                                                            TVkSharingMode(VK_SHARING_MODE_EXCLUSIVE),
+                                                            [],
+                                                            0,
+                                                            TVkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) or TVkMemoryPropertyFlags(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) or TVkMemoryPropertyFlags(VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) or TVkMemoryPropertyFlags(VK_MEMORY_PROPERTY_HOST_CACHED_BIT),
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            [TpvVulkanBufferFlag.PersistentMappedIfPossible,TpvVulkanBufferFlag.PreferDedicatedAllocation],
+                                                            0,
+                                                            0,
+                                                            'fFrameBufferTextureBuffers['+IntToStr(Index)+']');
  end;
 
  fFrameBufferGeneration:=0;
@@ -2032,6 +2066,7 @@ begin
  end;
  FreeAndNil(fVulkanCommandPool);
  for Index:=0 to pvApplication.CountInFlightFrames-1 do begin
+  FreeAndNil(fFrameBufferTextureBuffers[Index]);
   FreeAndNil(fFrameBufferTextures[Index]);
  end;
  FreeAndNil(fFrameBufferTextureSampler);
@@ -2809,15 +2844,132 @@ procedure TScreenEmulator.Draw(const aSwapChainImageIndex:TpvInt32;var aWaitSema
 const Offsets:array[0..0] of TVkDeviceSize=(0);
 var VulkanCommandBuffer:TpvVulkanCommandBuffer;
     VulkanSwapChain:TpvVulkanSwapChain;
+    MemoryBarrier:TVkMemoryBarrier;
+    ImageMemoryBarrier:TVkImageMemoryBarrier;
+    BufferImageCopy:TVkBufferImageCopy;
 begin
 
  begin
 
   begin
 
+   VulkanCommandBuffer:=fVulkanRenderCommandBuffers[pvApplication.DrawInFlightFrameIndex];
+   VulkanSwapChain:=pvApplication.VulkanSwapChain;
+
+   VulkanCommandBuffer.Reset(TVkCommandBufferResetFlags(VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT));
+
+   VulkanCommandBuffer.BeginRecording(TVkCommandBufferUsageFlags(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT));
+
    if fFrameBufferTextureGenerations[pvApplication.DrawInFlightFrameIndex]<>fFrameBufferGenerations[pvApplication.DrawInFlightFrameIndex] then begin
+
     fFrameBufferTextureGenerations[pvApplication.DrawInFlightFrameIndex]:=fFrameBufferGenerations[pvApplication.DrawInFlightFrameIndex];
-    fFrameBufferTextures[pvApplication.DrawInFlightFrameIndex].Upload(pvApplication.VulkanDevice.GraphicsQueue,
+
+    pvApplication.VulkanDevice.MemoryStaging.Upload(fVulkanDevice.TransferQueue,
+                                                    fVulkanTransferCommandBuffer,
+                                                    fVulkanTransferCommandBufferFence,
+                                                    fFrameBuffers[pvApplication.DrawInFlightFrameIndex][0],
+                                                    fFrameBufferTextureBuffers[pvApplication.DrawInFlightFrameIndex],
+                                                    0,
+                                                    SizeOf(TMachineInstance.TFrameBuffer)
+                                                   );
+
+    fVulkanDevice.DebugUtils.CmdBufLabelBegin(VulkanCommandBuffer,'ComputerCoreRenderCanvasUpload',[0.5,1.0,0.25,1.0]);
+
+    FillChar(MemoryBarrier,SizeOf(TVkMemoryBarrier),#0);
+    MemoryBarrier.sType:=VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    MemoryBarrier.pNext:=nil;
+    MemoryBarrier.srcAccessMask:=TVkAccessFlags(VK_ACCESS_MEMORY_WRITE_BIT);
+    MemoryBarrier.dstAccessMask:=TVkAccessFlags(VK_ACCESS_TRANSFER_READ_BIT);
+    fVulkanDevice.Commands.CmdPipelineBarrier(VulkanCommandBuffer.Handle,
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_TRANSFER_BIT),
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_TRANSFER_BIT),
+                                              0,
+                                              1,
+                                              @MemoryBarrier,
+                                              0,
+                                              nil,
+                                              0,
+                                              nil);
+
+    // Transform from UNDEFINED to TRANSFER_DST_OPTIMAL
+    FillChar(ImageMemoryBarrier,SizeOf(TVkImageMemoryBarrier),#0);
+    ImageMemoryBarrier.sType:=VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    ImageMemoryBarrier.pNext:=nil;
+    ImageMemoryBarrier.srcAccessMask:=TVkAccessFlags(VK_ACCESS_MEMORY_WRITE_BIT);
+    ImageMemoryBarrier.dstAccessMask:=TVkAccessFlags(VK_ACCESS_TRANSFER_WRITE_BIT);
+    ImageMemoryBarrier.oldLayout:=TVkImageLayout(VK_IMAGE_LAYOUT_UNDEFINED);
+    ImageMemoryBarrier.newLayout:=TVkImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    ImageMemoryBarrier.srcQueueFamilyIndex:=VK_QUEUE_FAMILY_IGNORED;
+    ImageMemoryBarrier.dstQueueFamilyIndex:=VK_QUEUE_FAMILY_IGNORED;
+    ImageMemoryBarrier.image:=fFrameBufferTextures[pvApplication.DrawInFlightFrameIndex].Image.Handle;
+    ImageMemoryBarrier.subresourceRange.aspectMask:=TVkImageAspectFlags(VK_IMAGE_ASPECT_COLOR_BIT);
+    ImageMemoryBarrier.subresourceRange.baseMipLevel:=0;
+    ImageMemoryBarrier.subresourceRange.levelCount:=1;
+    ImageMemoryBarrier.subresourceRange.baseArrayLayer:=0;
+    ImageMemoryBarrier.subresourceRange.layerCount:=1;
+    fVulkanDevice.Commands.CmdPipelineBarrier(VulkanCommandBuffer.Handle,
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_HOST_BIT),
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_TRANSFER_BIT),
+                                              0,
+                                              0,
+                                              nil,
+                                              0,
+                                              nil,
+                                              1,
+                                              @ImageMemoryBarrier);
+
+    // Copy from buffer to image
+    FillChar(BufferImageCopy,SizeOf(TVkBufferImageCopy),#0);
+    BufferImageCopy.bufferOffset:=0;
+    BufferImageCopy.bufferRowLength:=0;
+    BufferImageCopy.bufferImageHeight:=0;
+    BufferImageCopy.imageSubresource.aspectMask:=TVkImageAspectFlags(VK_IMAGE_ASPECT_COLOR_BIT);
+    BufferImageCopy.imageSubresource.mipLevel:=0;
+    BufferImageCopy.imageSubresource.baseArrayLayer:=0;
+    BufferImageCopy.imageSubresource.layerCount:=1;
+    BufferImageCopy.imageOffset.x:=0;
+    BufferImageCopy.imageOffset.y:=0;
+    BufferImageCopy.imageOffset.z:=0;
+    BufferImageCopy.imageExtent.width:=TMachineInstance.ScreenWidth;
+    BufferImageCopy.imageExtent.height:=TMachineInstance.ScreenHeight;
+    BufferImageCopy.imageExtent.depth:=1;
+    fVulkanDevice.Commands.CmdCopyBufferToImage(VulkanCommandBuffer.Handle,
+                                                fFrameBufferTextureBuffers[pvApplication.DrawInFlightFrameIndex].Handle,
+                                                fFrameBufferTextures[pvApplication.DrawInFlightFrameIndex].Image.Handle,
+                                                TVkImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL),
+                                                1,
+                                                @BufferImageCopy);
+
+    // Transform from TRANSFER_DST_OPTIMAL to SHADER_READ_ONLY_OPTIMAL
+    FillChar(ImageMemoryBarrier,SizeOf(TVkImageMemoryBarrier),#0);
+    ImageMemoryBarrier.sType:=VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    ImageMemoryBarrier.pNext:=nil;
+    ImageMemoryBarrier.srcAccessMask:=TVkAccessFlags(VK_ACCESS_TRANSFER_WRITE_BIT);
+    ImageMemoryBarrier.dstAccessMask:=TVkAccessFlags(VK_ACCESS_SHADER_READ_BIT);
+    ImageMemoryBarrier.oldLayout:=TVkImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    ImageMemoryBarrier.newLayout:=TVkImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    ImageMemoryBarrier.srcQueueFamilyIndex:=VK_QUEUE_FAMILY_IGNORED;
+    ImageMemoryBarrier.dstQueueFamilyIndex:=VK_QUEUE_FAMILY_IGNORED;
+    ImageMemoryBarrier.image:=fFrameBufferTextures[pvApplication.DrawInFlightFrameIndex].Image.Handle;
+    ImageMemoryBarrier.subresourceRange.aspectMask:=TVkImageAspectFlags(VK_IMAGE_ASPECT_COLOR_BIT);
+    ImageMemoryBarrier.subresourceRange.baseMipLevel:=0;
+    ImageMemoryBarrier.subresourceRange.levelCount:=1;
+    ImageMemoryBarrier.subresourceRange.baseArrayLayer:=0;
+    ImageMemoryBarrier.subresourceRange.layerCount:=1;
+    fVulkanDevice.Commands.CmdPipelineBarrier(VulkanCommandBuffer.Handle,
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_TRANSFER_BIT),
+                                              TVkPipelineStageFlags(VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT),
+                                              0,
+                                              0,
+                                              nil,
+                                              0,
+                                              nil,
+                                              1,
+                                              @ImageMemoryBarrier);
+
+    fVulkanDevice.DebugUtils.CmdBufLabelEnd(VulkanCommandBuffer);
+
+{   fFrameBufferTextures[pvApplication.DrawInFlightFrameIndex].Upload(pvApplication.VulkanDevice.GraphicsQueue,
                                                                       fVulkanGraphicsCommandBuffer,
                                                                       fVulkanGraphicsCommandBufferFence,
                                                                       pvApplication.VulkanDevice.TransferQueue,
@@ -2830,15 +2982,8 @@ begin
                                                                       0,
                                                                       true,
                                                                       nil,
-                                                                      true);
+                                                                      true);}
    end;
-
-   VulkanCommandBuffer:=fVulkanRenderCommandBuffers[pvApplication.DrawInFlightFrameIndex];
-   VulkanSwapChain:=pvApplication.VulkanSwapChain;
-
-   VulkanCommandBuffer.Reset(TVkCommandBufferResetFlags(VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT));
-
-   VulkanCommandBuffer.BeginRecording(TVkCommandBufferUsageFlags(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT));
 
    fVulkanCanvas.ExecuteUpload(pvApplication.VulkanDevice.TransferQueue,
                                fVulkanTransferCommandBuffer,
