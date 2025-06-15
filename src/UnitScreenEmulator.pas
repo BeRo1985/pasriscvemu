@@ -1523,6 +1523,9 @@ procedure TMachineInstance.Boot;
 var Stream:TStream;
 begin
 
+ fMachine.VirtIOBlockDevice.AttachStream(nil);
+ fMachine.NVMeDevice.AttachStream(nil);
+
  fMachine.Reset;
 
  if FileExists(Application.VirtIOBlockImageFileName) then begin
