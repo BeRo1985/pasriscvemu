@@ -1380,7 +1380,7 @@ begin
 
  fMachineConfiguration.DebuggerPort:=Application.DebuggerPort;
 
- fMachineConfiguration.CountCPUCores:=Application.CountCPUCores;
+ fMachineConfiguration.CountHARTs:=Application.CountHARTs;
 
  fMachineConfiguration.BootArguments:=Application.BootArguments;
 

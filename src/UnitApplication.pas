@@ -36,7 +36,7 @@ type TApplication=class(TpvApplication)
       public
       private
        fDebuggerPort:TpvInt32;
-       fCountCPUCores:TpvSizeInt;
+       fCountHARTs:TpvSizeInt;
        fMemorySize:TpvUInt64;
        fBIOSFileName:TpvUTF8String;
        fKernelFileName:TpvUTF8String;
@@ -61,7 +61,7 @@ type TApplication=class(TpvApplication)
        procedure Draw(const aSwapChainImageIndex:TpvInt32;var aWaitSemaphore:TpvVulkanSemaphore;const aWaitFence:TpvVulkanFence=nil); override;
       published
        property DebuggerPort:TpvInt32 read fDebuggerPort write fDebuggerPort;
-       property CountCPUCores:TpvSizeInt read fCountCPUCores write fCountCPUCores;
+       property CountHARTs:TpvSizeInt read fCountHARTs write fCountHARTs;
        property MemorySize:TpvUInt64 read fMemorySize write fMemorySize;
        property BIOSFileName:TpvUTF8String read fBIOSFileName write fBIOSFileName;
        property KernelFileName:TpvUTF8String read fKernelFileName write fKernelFileName;
@@ -170,7 +170,7 @@ begin
 
  fDebuggerPort:=-1; // -1 means no debugger
 
- fCountCPUCores:=2;
+ fCountHARTs:=2;
 
  fMemorySize:=TpvUInt64(2) shl 30; // 2 GiB
 
@@ -201,9 +201,9 @@ begin
      fDebuggerPort:=StrToIntDef(ParamStr(Index),-1);
      inc(Index);
     end;
-   end else if (Parameter='smp') or (Parameter='cpucores') then begin
+   end else if (Parameter='smp') or (Parameter='cpucores') or (Parameter='harts') then begin
     if Index<=Count then begin
-     fCountCPUCores:=Max(StrToIntDef(ParamStr(Index),1),1);
+     fCountHARTs:=Max(StrToIntDef(ParamStr(Index),1),1);
      inc(Index);
     end;
    end else if (Parameter='memory') or (Parameter='ram') or (Parameter='mem') then begin
