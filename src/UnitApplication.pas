@@ -44,6 +44,7 @@ type TApplication=class(TpvApplication)
        fVirtIOBlockImageFileName:TpvUTF8String;
        fNVMeImageFileName:TpvUTF8String;
        fBootArguments:TpvUTF8String;
+       fAIA:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -69,6 +70,7 @@ type TApplication=class(TpvApplication)
        property VirtIOBlockImageFileName:TpvUTF8String read fVirtIOBlockImageFileName write fVirtIOBlockImageFileName;
        property NVMeImageFileName:TpvUTF8String read fNVMeImageFileName write fNVMeImageFileName;
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
+       property AIA:Boolean read fAIA write fAIA;
      end;
 
 var Application:TApplication=nil;
@@ -186,6 +188,8 @@ begin
 
  fBootArguments:='root=/dev/mem rw earlyprintk console=$LINUXUART$ console=tty0 earlycon=sbi';
 
+ fAIA:=false;
+
  Index:=1;
  Count:=ParamCount;
  while Index<=Count do begin
@@ -249,6 +253,10 @@ begin
      fBootArguments:=ParamStr(Index);
      inc(Index);
     end;
+   end else if Parameter='aia' then begin
+    fAIA:=true;
+   end else if Parameter='no-aia' then begin
+    fAIA:=false;
    end else begin
     // Ignoring
    end;

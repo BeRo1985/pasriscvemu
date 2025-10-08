@@ -1386,6 +1386,8 @@ begin
 
  fMachineConfiguration.MemorySize:=TPasRISCVUInt64(2048) shl 20;
 
+ fMachineConfiguration.AIA:=Application.AIA;
+
  fNextFrameTime:=0;
 
  if FileExists(Application.BIOSFileName) then begin
