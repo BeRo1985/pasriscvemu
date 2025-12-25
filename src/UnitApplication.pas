@@ -36,6 +36,7 @@ type TApplication=class(TpvApplication)
       public
       private
        fDebuggerPort:TpvInt32;
+       fDebuggerLocal:Boolean;
        fCountHARTs:TpvSizeInt;
        fMemorySize:TpvUInt64;
        fBIOSFileName:TpvUTF8String;
@@ -62,6 +63,7 @@ type TApplication=class(TpvApplication)
        procedure Draw(const aSwapChainImageIndex:TpvInt32;var aWaitSemaphore:TpvVulkanSemaphore;const aWaitFence:TpvVulkanFence=nil); override;
       published
        property DebuggerPort:TpvInt32 read fDebuggerPort write fDebuggerPort;
+       property DebuggerLocal:Boolean read fDebuggerLocal write fDebuggerLocal;
        property CountHARTs:TpvSizeInt read fCountHARTs write fCountHARTs;
        property MemorySize:TpvUInt64 read fMemorySize write fMemorySize;
        property BIOSFileName:TpvUTF8String read fBIOSFileName write fBIOSFileName;
@@ -172,6 +174,8 @@ begin
 
  fDebuggerPort:=-1; // -1 means no debugger
 
+ fDebuggerLocal:=false;
+
  fCountHARTs:=2;
 
  fMemorySize:=TpvUInt64(2) shl 30; // 2 GiB
@@ -200,11 +204,15 @@ begin
    if (length(Parameter)>0) and (Parameter[1] in ['-','/']) then begin
     Parameter:=LowerCase(Copy(Parameter,2,length(Parameter)-1));
    end;
-   if (Parameter='debug') or (Parameter='gdb') then begin
+   if Parameter='gdb' then begin
     if Index<=Count then begin
      fDebuggerPort:=StrToIntDef(ParamStr(Index),-1);
      inc(Index);
     end;
+   end else if Parameter='debug' then begin
+    fDebuggerLocal:=true;
+   end else if Parameter='no-debug' then begin
+    fDebuggerLocal:=false;
    end else if (Parameter='smp') or (Parameter='cpucores') or (Parameter='harts') then begin
     if Index<=Count then begin
      fCountHARTs:=Max(StrToIntDef(ParamStr(Index),1),1);

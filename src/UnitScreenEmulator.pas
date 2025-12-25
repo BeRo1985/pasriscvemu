@@ -1376,7 +1376,9 @@ begin
 
  fMachineConfiguration:=TPasRISCV.TConfiguration.Create;
 
- fMachineConfiguration.Debugger:=Application.DebuggerPort>=0;
+ fMachineConfiguration.Debugger:=(Application.DebuggerPort>=0) or Application.DebuggerLocal;
+
+ fMachineConfiguration.DebuggerLocal:=Application.DebuggerLocal;
 
  fMachineConfiguration.DebuggerPort:=Application.DebuggerPort;
 

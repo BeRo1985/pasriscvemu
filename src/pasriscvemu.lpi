@@ -24,13 +24,13 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="-bios fw_payload.bin -no-kernel -nvme haiku.img -smp 4"/>
+        <CommandLineParams Value="-bios fw_jump.bin -kernel kernel.bin -smp 4 -debug"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="-bios fw_payload.bin -no-kernel -nvme haiku.img -smp 4"/>
+            <CommandLineParams Value="-bios fw_jump.bin -kernel kernel.bin -smp 4 -debug"/>
           </local>
         </Mode0>
       </Modes>
