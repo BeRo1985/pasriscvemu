@@ -18,6 +18,9 @@
  {$define Windows}
 {$ifend}
 
+{$rangechecks off}
+{$overflowchecks off}
+
 {$if defined(fpc)}
  {$optimization level1}
 {$ifend}
