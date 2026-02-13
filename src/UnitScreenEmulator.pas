@@ -1550,7 +1550,7 @@ begin
 
  fMachine.Reset;
 
- if length(Application.VirtIOBlockImageFileName)>0 then begin
+ if fMachineConfiguration.VirtIOBlockEnabled then begin
   if FileExists(Application.VirtIOBlockImageFileName) then begin
    Stream:=TFileStream.Create(Application.VirtIOBlockImageFileName,fmOpenReadWrite);
    if assigned(Stream) then begin
@@ -1581,7 +1581,7 @@ begin
   end;
  end;
 
- if length(Application.NVMeImageFileName)>0 then begin
+ if fMachineConfiguration.NVMeEnabled then begin
   if FileExists(Application.NVMeImageFileName) then begin
    Stream:=TFileStream.Create(Application.NVMeImageFileName,fmOpenReadWrite);
    if assigned(Stream) then begin
