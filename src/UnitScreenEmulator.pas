@@ -1434,6 +1434,16 @@ begin
   end;
  end;
 
+ fMachineConfiguration.VirtIOBlockEnabled:=(length(Application.VirtIOBlockImageFileName)>0) and
+                                           (FileExists(Application.VirtIOBlockImageFileName) or
+                                            FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.VirtIOBlockImageFileName) or
+                                            pvApplication.Assets.ExistAsset('riscv/'+Application.VirtIOBlockImageFileName));
+
+ fMachineConfiguration.NVMeEnabled:=(length(Application.NVMeImageFileName)>0) and
+                                    (FileExists(Application.NVMeImageFileName) or
+                                     FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.NVMeImageFileName) or
+                                     pvApplication.Assets.ExistAsset('riscv/'+Application.NVMeImageFileName));
+
  fMachine:=TPasRISCV.Create(fMachineConfiguration);
 
 {$if (defined(fpc) and defined(unix)) or defined(Windows)}
@@ -1535,60 +1545,64 @@ begin
 
  fMachine.Reset;
 
- if FileExists(Application.VirtIOBlockImageFileName) then begin
-  Stream:=TFileStream.Create(Application.VirtIOBlockImageFileName,fmOpenReadWrite);
-  if assigned(Stream) then begin
-   try
-    fMachine.VirtIOBlockDevice.AttachStream(Stream);
-   except
-    FreeAndNil(Stream);
+ if length(Application.VirtIOBlockImageFileName)>0 then begin
+  if FileExists(Application.VirtIOBlockImageFileName) then begin
+   Stream:=TFileStream.Create(Application.VirtIOBlockImageFileName,fmOpenReadWrite);
+   if assigned(Stream) then begin
+    try
+     fMachine.VirtIOBlockDevice.AttachStream(Stream);
+    except
+     FreeAndNil(Stream);
+    end;
    end;
-  end;
- end else if FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.VirtIOBlockImageFileName) then begin
-  Stream:=TFileStream.Create(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.VirtIOBlockImageFileName,fmOpenReadWrite);
-  if assigned(Stream) then begin
-   try
-    fMachine.VirtIOBlockDevice.AttachStream(Stream);
-   except
-    FreeAndNil(Stream);
+  end else if FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.VirtIOBlockImageFileName) then begin
+   Stream:=TFileStream.Create(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.VirtIOBlockImageFileName,fmOpenReadWrite);
+   if assigned(Stream) then begin
+    try
+     fMachine.VirtIOBlockDevice.AttachStream(Stream);
+    except
+     FreeAndNil(Stream);
+    end;
    end;
-  end;
- end else if pvApplication.Assets.ExistAsset('riscv/'+Application.VirtIOBlockImageFileName) then begin
-  Stream:=pvApplication.Assets.GetAssetStream('riscv/'+Application.VirtIOBlockImageFileName);
-  if assigned(Stream) then begin
-   try
-    fMachine.VirtIOBlockDevice.LoadFromStream(Stream);
-   finally
-    FreeAndNil(Stream);
+  end else if pvApplication.Assets.ExistAsset('riscv/'+Application.VirtIOBlockImageFileName) then begin
+   Stream:=pvApplication.Assets.GetAssetStream('riscv/'+Application.VirtIOBlockImageFileName);
+   if assigned(Stream) then begin
+    try
+     fMachine.VirtIOBlockDevice.LoadFromStream(Stream);
+    finally
+     FreeAndNil(Stream);
+    end;
    end;
   end;
  end;
 
- if FileExists(Application.NVMeImageFileName) then begin
-  Stream:=TFileStream.Create(Application.NVMeImageFileName,fmOpenReadWrite);
-  if assigned(Stream) then begin
-   try
-    fMachine.NVMeDevice.AttachStream(Stream);
-   except
-    FreeAndNil(Stream);
+ if length(Application.NVMeImageFileName)>0 then begin
+  if FileExists(Application.NVMeImageFileName) then begin
+   Stream:=TFileStream.Create(Application.NVMeImageFileName,fmOpenReadWrite);
+   if assigned(Stream) then begin
+    try
+     fMachine.NVMeDevice.AttachStream(Stream);
+    except
+     FreeAndNil(Stream);
+    end;
    end;
-  end;
- end else if FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.NVMeImageFileName) then begin
-  Stream:=TFileStream.Create(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.NVMeImageFileName,fmOpenReadWrite);
-  if assigned(Stream) then begin
-   try
-    fMachine.NVMeDevice.AttachStream(Stream);
-   except
-    FreeAndNil(Stream);
+  end else if FileExists(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.NVMeImageFileName) then begin
+   Stream:=TFileStream.Create(IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(pvApplication.Assets.BasePath)+'riscv')+Application.NVMeImageFileName,fmOpenReadWrite);
+   if assigned(Stream) then begin
+    try
+     fMachine.NVMeDevice.AttachStream(Stream);
+    except
+     FreeAndNil(Stream);
+    end;
    end;
-  end;
- end else if pvApplication.Assets.ExistAsset('riscv/'+Application.NVMeImageFileName) then begin
-  Stream:=pvApplication.Assets.GetAssetStream('riscv/'+Application.NVMeImageFileName);
-  if assigned(Stream) then begin
-   try
-    fMachine.NVMeDevice.LoadFromStream(Stream);
-   finally
-    FreeAndNil(Stream);
+  end else if pvApplication.Assets.ExistAsset('riscv/'+Application.NVMeImageFileName) then begin
+   Stream:=pvApplication.Assets.GetAssetStream('riscv/'+Application.NVMeImageFileName);
+   if assigned(Stream) then begin
+    try
+     fMachine.NVMeDevice.LoadFromStream(Stream);
+    finally
+     FreeAndNil(Stream);
+    end;
    end;
   end;
  end;
