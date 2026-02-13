@@ -1540,8 +1540,13 @@ procedure TMachineInstance.Boot;
 var Stream:TStream;
 begin
 
- fMachine.VirtIOBlockDevice.AttachStream(nil);
- fMachine.NVMeDevice.AttachStream(nil);
+ if fMachineConfiguration.VirtIOBlockEnabled then begin
+  fMachine.VirtIOBlockDevice.AttachStream(nil);
+ end;
+
+ if fMachineConfiguration.NVMeEnabled then begin
+  fMachine.NVMeDevice.AttachStream(nil);
+ end;
 
  fMachine.Reset;
 
