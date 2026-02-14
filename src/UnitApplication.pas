@@ -279,6 +279,8 @@ begin
       fDisplayMode:=TPasRISCV.TDisplayMode.VirtIOGPU;
      end else if Value='bochsvbe' then begin
       fDisplayMode:=TPasRISCV.TDisplayMode.BochsVBE;
+     end else if Value='cirrus' then begin
+      fDisplayMode:=TPasRISCV.TDisplayMode.Cirrus;
      end;
      inc(Index);
     end;

@@ -51,7 +51,7 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -bootargs [bootparams]        | `root=/dev/mem rw earlyprintk console=$LINUXUART$ console=tty0 earlycon=sbi` | Boot arguments for the kernel                                  |
 | -aia                          |                                                                              | Enable Advanced Interrupt Architecture (AIA)                   |
 | -no-aia                       |                                                                              | Disable Advanced Interrupt Architecture (AIA)                  |
-| -display [mode]               | `simplefb`                                                                   | Display mode: `simplefb`, `virtiogpu`, or `bochsvbe`           |
+| -display [mode]               | `simplefb`                                                                   | Display mode: `simplefb`, `virtiogpu`, `bochsvbe`, or `cirrus` |
 
 ### Keys
 
