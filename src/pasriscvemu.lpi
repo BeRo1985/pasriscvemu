@@ -24,13 +24,13 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="-bios fw_jump.bin -kernel kernel.bin -smp 1"/>
+        <CommandLineParams Value="-bios fw_payload.bin -no-kernel -nvme alpine.img -smp 1 -displaymode cirrus"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="-bios fw_jump.bin -kernel kernel.bin -smp 1"/>
+            <CommandLineParams Value="-bios fw_payload.bin -no-kernel -nvme alpine.img -smp 1 -displaymode cirrus"/>
           </local>
         </Mode0>
       </Modes>

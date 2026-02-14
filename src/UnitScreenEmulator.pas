@@ -57,9 +57,11 @@ type { TMachineInstance }
              FontHeight=16;
              ScreenWidth=640;
              ScreenHeight=400;
+             MaxScreenWidth=2048;
+             MaxScreenHeight=2048;
              CanvasWidth=ScreenWidth*4;
              CanvasHeight=ScreenHeight*4;
-       type TFrameBuffer=array[0..(ScreenWidth*ScreenHeight)-1] of TpvUInt32;
+       type TFrameBuffer=array[0..(MaxScreenWidth*MaxScreenHeight)-1] of TpvUInt32;
             TFrameBufferItem=record
              Width:TpvInt32;
              Height:TpvInt32;
