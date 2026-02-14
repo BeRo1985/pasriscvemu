@@ -130,6 +130,7 @@ begin
  fMachineConfiguration.MemorySize:=Application.MemorySize;
  fMachineConfiguration.AIA:=Application.AIA;
  fMachineConfiguration.DisplayMode:=Application.DisplayMode;
+ fMachineConfiguration.RTCMode:=Application.RTCMode;
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;

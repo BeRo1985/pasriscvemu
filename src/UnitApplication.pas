@@ -48,6 +48,7 @@ type TApplication=class(TpvApplication)
        fBootArguments:TpvUTF8String;
        fAIA:Boolean;
        fDisplayMode:TPasRISCV.TDisplayMode;
+       fRTCMode:TPasRISCV.TRTCMode;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -76,6 +77,7 @@ type TApplication=class(TpvApplication)
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
        property AIA:Boolean read fAIA write fAIA;
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
+       property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
      end;
 
 var Application:TApplication=nil;
@@ -199,6 +201,8 @@ begin
 
  fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
 
+ fRTCMode:=TPasRISCV.TRTCMode.DS1742;
+
  Index:=1;
  Count:=ParamCount;
  while Index<=Count do begin
@@ -281,6 +285,18 @@ begin
       fDisplayMode:=TPasRISCV.TDisplayMode.BochsVBE;
      end else if Value='cirrus' then begin
       fDisplayMode:=TPasRISCV.TDisplayMode.Cirrus;
+     end;
+     inc(Index);
+    end;
+   end else if (Parameter='rtc') or (Parameter='rtcmode') then begin
+    if Index<=Count then begin
+     Value:=LowerCase(ParamStr(Index));
+     if Value='ds1742' then begin
+      fRTCMode:=TPasRISCV.TRTCMode.DS1742;
+     end else if Value='goldfish' then begin
+      fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
+     end else if Value='ds1307' then begin
+      fRTCMode:=TPasRISCV.TRTCMode.DS1307;
      end;
      inc(Index);
     end;
