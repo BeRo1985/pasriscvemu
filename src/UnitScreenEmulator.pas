@@ -1641,7 +1641,7 @@ begin
    FrameBufferItem^.Height:=fMachine.FrameBufferDevice.Height;
    FrameBufferItem^.Active:=fMachine.FrameBufferDevice.Active;
    if fMachine.FrameBufferDevice.Active then begin
-    Move(fMachine.FrameBufferDevice.Data[0],FrameBufferItem^.Data[0],FrameBufferItem^.Width*FrameBufferItem^.Height*SizeOf(TpvUInt32));
+    Move(fMachine.FrameBufferDevice.OutputData[0],FrameBufferItem^.Data[0],FrameBufferItem^.Width*FrameBufferItem^.Height*SizeOf(TpvUInt32));
    end else begin
     FillChar(FrameBufferItem^.Data[0],FrameBufferItem^.Width*FrameBufferItem^.Height*SizeOf(TpvUInt32),#0);
    end;
