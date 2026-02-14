@@ -34,7 +34,9 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 
 | Command Line                  | Default                                                                      | Description                                                    |
 |-------------------------------|------------------------------------------------------------------------------|----------------------------------------------------------------|
-| -debug [port]                 | `-1`                                                                         | Enable GDB remote debugging on port                            |
+| -gdb [port]                   |                                                                              | Enable GDB remote debugging on specified port                  |
+| -debug                        |                                                                              | Enable local debugging                                         |
+| -no-debug                     |                                                                              | Disable local debugging                                        |
 | -smp [cpucores]               | `2`                                                                          | Number of CPU cores to emulate                                 |
 | -memory [ram]                 | `2GiB`                                                                       | Amount of RAM to emulate                                       |
 | -bios [filename]              | `fw_jump.bin`                                                                | Filename of the BIOS firmware image                            |
@@ -47,6 +49,9 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -nvme [filename]              |                                                                              | Filename of the NVMe block device image                        |
 | -no-nvme                      |                                                                              | Do not load a NVMe block device image                          |
 | -bootargs [bootparams]        | `root=/dev/mem rw earlyprintk console=$LINUXUART$ console=tty0 earlycon=sbi` | Boot arguments for the kernel                                  |
+| -aia                          |                                                                              | Enable Advanced Interrupt Architecture (AIA)                   |
+| -no-aia                       |                                                                              | Disable Advanced Interrupt Architecture (AIA)                  |
+| -display [mode]               | `simplefb`                                                                   | Display mode: `simplefb`, `virtiogpu`, or `bochsvbe`           |
 
 ### Keys
 

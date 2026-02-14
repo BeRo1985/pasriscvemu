@@ -1389,9 +1389,11 @@ begin
 
  fMachineConfiguration.BootArguments:=Application.BootArguments;
 
- fMachineConfiguration.MemorySize:=TPasRISCVUInt64(2048) shl 20;
+ fMachineConfiguration.MemorySize:=Application.MemorySize;
 
  fMachineConfiguration.AIA:=Application.AIA;
+
+ fMachineConfiguration.DisplayMode:=Application.DisplayMode;
 
  fNextFrameTime:=0;
 
