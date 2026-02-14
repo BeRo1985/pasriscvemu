@@ -371,11 +371,11 @@ begin
 
  inherited Update(aDeltaTime);
 
- fRenderer.UpdateEmulatorState(true);
+ fRenderer.UpdateEmulatorState;
 
  fRenderer.RenderToCanvas(pvApplication.UpdateInFlightFrameIndex,
-                           fRenderer.VulkanCanvas.Width,
-                           fRenderer.VulkanCanvas.Height);
+                          fRenderer.VulkanCanvas.Width,
+                          fRenderer.VulkanCanvas.Height);
 
  fTime:=fTime+aDeltaTime;
 
