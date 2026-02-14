@@ -47,7 +47,7 @@ type TApplication=class(TpvApplication)
        fNVMeImageFileName:TpvUTF8String;
        fBootArguments:TpvUTF8String;
        fAIA:Boolean;
-       fDisplayMode:TPasRISCV.TConfiguration.TDisplayMode;
+       fDisplayMode:TPasRISCV.TDisplayMode;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -75,7 +75,7 @@ type TApplication=class(TpvApplication)
        property NVMeImageFileName:TpvUTF8String read fNVMeImageFileName write fNVMeImageFileName;
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
        property AIA:Boolean read fAIA write fAIA;
-       property DisplayMode:TPasRISCV.TConfiguration.TDisplayMode read fDisplayMode write fDisplayMode;
+       property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
      end;
 
 var Application:TApplication=nil;
@@ -197,7 +197,7 @@ begin
 
  fAIA:=false;
 
- fDisplayMode:=TPasRISCV.TConfiguration.TDisplayMode.SimpleFB;
+ fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
 
  Index:=1;
  Count:=ParamCount;
@@ -274,11 +274,11 @@ begin
     if Index<=Count then begin
      Value:=LowerCase(ParamStr(Index));
      if Value='simplefb' then begin
-      fDisplayMode:=TPasRISCV.TConfiguration.TDisplayMode.SimpleFB;
+      fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
      end else if Value='virtiogpu' then begin
-      fDisplayMode:=TPasRISCV.TConfiguration.TDisplayMode.VirtIOGPU;
+      fDisplayMode:=TPasRISCV.TDisplayMode.VirtIOGPU;
      end else if Value='bochsvbe' then begin
-      fDisplayMode:=TPasRISCV.TConfiguration.TDisplayMode.BochsVBE;
+      fDisplayMode:=TPasRISCV.TDisplayMode.BochsVBE;
      end;
      inc(Index);
     end;
