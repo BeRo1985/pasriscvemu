@@ -52,6 +52,8 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -aia                          |                                                                              | Enable Advanced Interrupt Architecture (AIA)                   |
 | -no-aia                       |                                                                              | Disable Advanced Interrupt Architecture (AIA)                  |
 | -display [mode]               | `simplefb`                                                                   | Display mode: `simplefb`, `virtiogpu`, `bochsvbe`, or `cirrus` |
+| -rtc [mode]                   | `goldfish`                                                                   | RTC mode: `goldfish`, `ds1742`, `ds1307`, or `virtio`          |
+| -i2c [mode]                   | `designware`                                                                 | I2C mode: `opencores` (or `oc`), `designware` (or `dw`)        |
 
 ### Keys
 
