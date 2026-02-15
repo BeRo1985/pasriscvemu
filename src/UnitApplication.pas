@@ -49,6 +49,7 @@ type TApplication=class(TpvApplication)
        fAIA:Boolean;
        fDisplayMode:TPasRISCV.TDisplayMode;
        fRTCMode:TPasRISCV.TRTCMode;
+       fI2CMode:TPasRISCV.TI2CMode;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -78,6 +79,7 @@ type TApplication=class(TpvApplication)
        property AIA:Boolean read fAIA write fAIA;
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
+       property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
      end;
 
 var Application:TApplication=nil;
@@ -203,6 +205,8 @@ begin
 
  fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
 
+ fI2CMode:=TPasRISCV.TI2CMode.DesignWare;
+
  Index:=1;
  Count:=ParamCount;
  while Index<=Count do begin
@@ -297,6 +301,18 @@ begin
       fRTCMode:=TPasRISCV.TRTCMode.DS1742;
      end else if Value='ds1307' then begin
       fRTCMode:=TPasRISCV.TRTCMode.DS1307;
+     end else if Value='virtio' then begin
+      fRTCMode:=TPasRISCV.TRTCMode.VirtIO;
+     end;
+     inc(Index);
+    end;
+   end else if (Parameter='i2c') or (Parameter='i2cmode') then begin
+    if Index<=Count then begin
+     Value:=LowerCase(ParamStr(Index));
+     if (Value='opencores') or (Value='oc') then begin
+      fI2CMode:=TPasRISCV.TI2CMode.OpenCores;
+     end else if (Value='designware') or (Value='dw') then begin
+      fI2CMode:=TPasRISCV.TI2CMode.DesignWare;
      end;
      inc(Index);
     end;
