@@ -201,7 +201,7 @@ begin
 
  fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
 
- fRTCMode:=TPasRISCV.TRTCMode.DS1742;
+ fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
 
  Index:=1;
  Count:=ParamCount;
@@ -291,10 +291,10 @@ begin
    end else if (Parameter='rtc') or (Parameter='rtcmode') then begin
     if Index<=Count then begin
      Value:=LowerCase(ParamStr(Index));
-     if Value='ds1742' then begin
-      fRTCMode:=TPasRISCV.TRTCMode.DS1742;
-     end else if Value='goldfish' then begin
+     if Value='goldfish' then begin
       fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
+     end else if Value='ds1742' then begin
+      fRTCMode:=TPasRISCV.TRTCMode.DS1742;
      end else if Value='ds1307' then begin
       fRTCMode:=TPasRISCV.TRTCMode.DS1307;
      end;
