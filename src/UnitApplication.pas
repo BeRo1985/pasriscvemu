@@ -50,6 +50,7 @@ type TApplication=class(TpvApplication)
        fDisplayMode:TPasRISCV.TDisplayMode;
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
+       fSoundMode:TPasRISCV.TSoundMode;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -80,6 +81,7 @@ type TApplication=class(TpvApplication)
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
+       property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
      end;
 
 var Application:TApplication=nil;
@@ -207,6 +209,8 @@ begin
 
  fI2CMode:=TPasRISCV.TI2CMode.DesignWare;
 
+ fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
+
  Index:=1;
  Count:=ParamCount;
  while Index<=Count do begin
@@ -316,6 +320,16 @@ begin
      end;
      inc(Index);
     end;
+   end else if (Parameter='sound') or (Parameter='soundmode') then begin
+    if Index<=Count then begin
+     Value:=LowerCase(ParamStr(Index));
+     if Value='virtio' then begin
+      fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
+     end else if Value='fm801' then begin
+      fSoundMode:=TPasRISCV.TSoundMode.FM801;
+     end;
+     inc(Index);
+    end; 
    end else begin
     // Ignoring
    end;

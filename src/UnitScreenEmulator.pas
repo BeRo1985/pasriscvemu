@@ -132,6 +132,7 @@ begin
  fMachineConfiguration.DisplayMode:=Application.DisplayMode;
  fMachineConfiguration.RTCMode:=Application.RTCMode;
  fMachineConfiguration.I2CMode:=Application.I2CMode;
+ fMachineConfiguration.SoundMode:=Application.SoundMode;  
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;
