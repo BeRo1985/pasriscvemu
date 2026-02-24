@@ -53,8 +53,8 @@ uses SysUtils,
 type { TMachineInstance }
      TMachineInstance=class(TpvPasRISCVEmulatorMachineInstance)
       public
-       const CanvasWidth=ScreenWidth*4;
-             CanvasHeight=ScreenHeight*4;
+       const CanvasWidth=TpvPasRISCVEmulatorMachineInstance.ScreenWidth*4;
+             CanvasHeight=TpvPasRISCVEmulatorMachineInstance.ScreenHeight*4;
       protected
        procedure ConfigureMachine; override;
        function GetBIOSFileName:TpvRawByteString; override;
