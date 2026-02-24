@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Stop dnsmasq if running
+if [ -f /var/run/dnsmasq-tap0.pid ]; then
+  sudo kill $(cat /var/run/dnsmasq-tap0.pid) 2>/dev/null
+  sudo rm -f /var/run/dnsmasq-tap0.pid
+  echo "dnsmasq stopped"
+fi
+
 # Auto-detect the default network interface (the one with the default route)
 HOST_IF=$(ip route show default | awk '{print $5; exit}')
 if [ -z "$HOST_IF" ]; then
