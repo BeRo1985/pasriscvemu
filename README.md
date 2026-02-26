@@ -54,6 +54,7 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -display [mode]               | `simplefb`                                                                   | Display mode: `simplefb`, `virtiogpu`, `bochsvbe`, or `cirrus` |
 | -rtc [mode]                   | `goldfish`                                                                   | RTC mode: `goldfish`, `ds1742`, `ds1307`, or `virtio`          |
 | -i2c [mode]                   | `designware`                                                                 | I2C mode: `opencores` (or `oc`), `designware` (or `dw`)        |
+| -soundmode [mode]             | `virtio`                                                                     | Sound mode: `virtio`, `fm801`, or `cmi8738` (also `cmipci`, `cmi`) |
 
 ### Keys
 

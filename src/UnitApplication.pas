@@ -327,6 +327,8 @@ begin
       fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
      end else if Value='fm801' then begin
       fSoundMode:=TPasRISCV.TSoundMode.FM801;
+     end else if (Value='cmi8738') or (Value='cmipci') or (Value='cmi') then begin
+      fSoundMode:=TPasRISCV.TSoundMode.CMI8738;
      end;
      inc(Index);
     end; 
