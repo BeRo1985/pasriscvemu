@@ -325,8 +325,6 @@ begin
      Value:=LowerCase(ParamStr(Index));
      if Value='virtio' then begin
       fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
-     end else if Value='fm801' then begin
-      fSoundMode:=TPasRISCV.TSoundMode.FM801;
      end else if (Value='cmi8738') or (Value='cmipci') or (Value='cmi') then begin
       fSoundMode:=TPasRISCV.TSoundMode.CMI8738;
      end;
