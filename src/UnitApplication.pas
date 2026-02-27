@@ -329,6 +329,8 @@ begin
       fSoundMode:=TPasRISCV.TSoundMode.FM801;
      end else if (Value='cmi8738') or (Value='cmipci') or (Value='cmi') then begin
       fSoundMode:=TPasRISCV.TSoundMode.CMI8738;
+     end else if Value='hda' then begin
+      fSoundMode:=TPasRISCV.TSoundMode.HDA; 
      end;
      inc(Index);
     end; 
