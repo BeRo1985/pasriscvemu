@@ -354,7 +354,7 @@ begin
   VulkanDebugging:=true;
   VulkanValidation:=true;
  end;
- Title:='PasRISCV-based RV64GC emulator with PasVulkan-based frontend - Copyright (C) 2024-2025, Benjamin ''BeRo'' Rosseaux';
+ Title:='PasRISCV-based RV64GC emulator with PasVulkan-based frontend - Copyright (C) 2024-2026, Benjamin ''BeRo'' Rosseaux';
  PathName:='riscvemu.pasvulkan';
  StartScreen:=TScreenEmulator;
  VisibleMouseCursor:=true;
