@@ -369,6 +369,9 @@ begin
 //PresentMode:={$ifdef NoVSync}TpvApplicationPresentMode.Mailbox{TpvApplicationPresentMode.NoVSync}{$else}TpvApplicationPresentMode.VSync{$endif};
  PresentMode:=TpvApplicationPresentMode.Mailbox;
  MaximumFramesPerSecond:=60.0;
+ PresentFrameLatencyMode:=TpvApplicationPresentFrameLatencyMode.CombinedWait;
+ FramePacingMode:=TpvApplicationFramePacingMode.Auto;
+ FramePacingStrategy:=TpvApplicationFramePacingStrategy.AbsoluteTimeRaster;
  VulkanAPIVersion:=VK_API_VERSION_1_0;
 end;
 
