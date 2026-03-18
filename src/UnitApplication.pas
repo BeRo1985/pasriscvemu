@@ -367,10 +367,10 @@ begin
  Height:=800;
 //DesiredCountSwapChainImages:=2;
 //PresentMode:={$ifdef NoVSync}TpvApplicationPresentMode.Mailbox{TpvApplicationPresentMode.NoVSync}{$else}TpvApplicationPresentMode.VSync{$endif};
- PresentMode:=TpvApplicationPresentMode.Mailbox;
- MaximumFramesPerSecond:=60.0;
+ PresentMode:=TpvApplicationPresentMode.VSync;
+ MaximumFramesPerSecond:=0.0;
  PresentFrameLatencyMode:=TpvApplicationPresentFrameLatencyMode.CombinedWait;
- FramePacingMode:=TpvApplicationFramePacingMode.Auto;
+ FramePacingMode:=TpvApplicationFramePacingMode.None;
  FramePacingStrategy:=TpvApplicationFramePacingStrategy.AbsoluteTimeRaster;
  VulkanAPIVersion:=VK_API_VERSION_1_0;
 end;
