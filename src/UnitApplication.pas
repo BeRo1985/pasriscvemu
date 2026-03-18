@@ -362,16 +362,16 @@ begin
  HideSystemBars:=true;
  AndroidSeparateMouseAndTouch:=true;
  UseAudio:=true;
- Blocking:=false;
+ Blocking:=true;
  Width:=1280;
  Height:=800;
 //DesiredCountSwapChainImages:=2;
 //PresentMode:={$ifdef NoVSync}TpvApplicationPresentMode.Mailbox{TpvApplicationPresentMode.NoVSync}{$else}TpvApplicationPresentMode.VSync{$endif};
  PresentMode:=TpvApplicationPresentMode.VSync;
- MaximumFramesPerSecond:=0.0;
+ MaximumFramesPerSecond:=60.0;
  PresentFrameLatencyMode:=TpvApplicationPresentFrameLatencyMode.CombinedWait;
- FramePacingMode:=TpvApplicationFramePacingMode.None;
- FramePacingStrategy:=TpvApplicationFramePacingStrategy.AbsoluteTimeRaster;
+ FramePacingMode:=TpvApplicationFramePacingMode.Auto;
+ FramePacingStrategy:=TpvApplicationFramePacingStrategy.DeviationCompensation;
  VulkanAPIVersion:=VK_API_VERSION_1_0;
 end;
 
