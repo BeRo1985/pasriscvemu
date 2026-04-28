@@ -209,6 +209,18 @@ begin
  inherited Show;
 
  fRenderer:=TpvPasRISCVEmulatorRenderer.Create;
+
+ fRenderer.Flags:=[];
+ if Application.Centered then begin
+  fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.Centered];
+ end;
+ if Application.Scaled then begin
+  fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.Scaled];
+ end;
+ if Application.ScaleToNearest then begin
+  fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.ScaleToNearest];
+ end;
+
  fRenderer.CreateVulkanResources(pvApplication.VulkanDevice);
 
  fVulkanCommandPool:=TpvVulkanCommandPool.Create(pvApplication.VulkanDevice,

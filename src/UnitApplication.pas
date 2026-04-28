@@ -48,6 +48,9 @@ type TApplication=class(TpvApplication)
        fBootArguments:TpvUTF8String;
        fAIA:Boolean;
        fSVVPTC:Boolean;
+       fCentered:Boolean;
+       fScaled:Boolean;
+       fScaleToNearest:Boolean;
        fDisplayMode:TPasRISCV.TDisplayMode;
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
@@ -80,6 +83,9 @@ type TApplication=class(TpvApplication)
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
        property AIA:Boolean read fAIA write fAIA;
        property SVVPTC:Boolean read fSVVPTC write fSVVPTC;
+       property Centered:Boolean read fCentered write fCentered;
+       property Scaled:Boolean read fScaled write fScaled;
+       property ScaleToNearest:Boolean read fScaleToNearest write fScaleToNearest;
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
@@ -207,6 +213,12 @@ begin
 
  fSVVPTC:=false;
 
+ fCentered:=true;
+
+ fScaled:=true;
+
+ fScaleToNearest:=false;
+
  fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
 
  fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
@@ -290,6 +302,18 @@ begin
     fSVVPTC:=true;
    end else if Parameter='no-svvptc' then begin
     fSVVPTC:=false;
+   end else if Parameter='centered' then begin
+    fCentered:=true;
+   end else if Parameter='no-centered' then begin
+    fCentered:=false;
+   end else if Parameter='scaled' then begin
+    fScaled:=true;
+   end else if Parameter='no-scaled' then begin
+    fScaled:=false;
+   end else if Parameter='scaletonearest' then begin
+    fScaleToNearest:=true;
+   end else if Parameter='no-scaletonearest' then begin
+    fScaleToNearest:=false;
    end else if (Parameter='display') or (Parameter='displaymode') then begin
     if Index<=Count then begin
      Value:=LowerCase(ParamStr(Index));
