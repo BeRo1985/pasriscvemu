@@ -129,6 +129,7 @@ begin
  fMachineConfiguration.BootArguments:=Application.BootArguments;
  fMachineConfiguration.MemorySize:=Application.MemorySize;
  fMachineConfiguration.AIA:=Application.AIA;
+ fMachineConfiguration.SVVPTC:=Application.SVVPTC;
  fMachineConfiguration.DisplayMode:=Application.DisplayMode;
  fMachineConfiguration.RTCMode:=Application.RTCMode;
  fMachineConfiguration.I2CMode:=Application.I2CMode;

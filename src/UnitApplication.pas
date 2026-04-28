@@ -47,6 +47,7 @@ type TApplication=class(TpvApplication)
        fNVMeImageFileName:TpvUTF8String;
        fBootArguments:TpvUTF8String;
        fAIA:Boolean;
+       fSVVPTC:Boolean;
        fDisplayMode:TPasRISCV.TDisplayMode;
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
@@ -78,6 +79,7 @@ type TApplication=class(TpvApplication)
        property NVMeImageFileName:TpvUTF8String read fNVMeImageFileName write fNVMeImageFileName;
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
        property AIA:Boolean read fAIA write fAIA;
+       property SVVPTC:Boolean read fSVVPTC write fSVVPTC;
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
@@ -203,6 +205,8 @@ begin
 
  fAIA:=false;
 
+ fSVVPTC:=false;
+
  fDisplayMode:=TPasRISCV.TDisplayMode.SimpleFB;
 
  fRTCMode:=TPasRISCV.TRTCMode.Goldfish;
@@ -282,6 +286,10 @@ begin
     fAIA:=true;
    end else if Parameter='no-aia' then begin
     fAIA:=false;
+   end else if Parameter='svvptc' then begin
+    fSVVPTC:=true;
+   end else if Parameter='no-svvptc' then begin
+    fSVVPTC:=false;
    end else if (Parameter='display') or (Parameter='displaymode') then begin
     if Index<=Count then begin
      Value:=LowerCase(ParamStr(Index));
