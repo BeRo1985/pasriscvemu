@@ -55,6 +55,12 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -rtc [mode]                   | `goldfish`                                                                   | RTC mode: `goldfish`, `ds1742`, `ds1307`, or `virtio`          |
 | -i2c [mode]                   | `designware`                                                                 | I2C mode: `opencores` (or `oc`), `designware` (or `dw`)        |
 | -soundmode [mode]             | `virtio`                                                                     | Sound mode: `virtio`, `fm801`, `cmi8738` (also `cmipci`, `cmi`), `hda` |
+| -centered                     |                                                                              | Center the monitor on the screen (default)                                            |
+| -no-centered                  |                                                                              | Do not center the monitor on the screen (default)                                            |
+| -scaled                       |                                                                              | Scale the monitor to fit the window (default)                                            |
+| -no-scaled                    |                                                                              | Do not scale the monitor to fit the window                                                   |
+| -scaletonearest              |                                                                              | Scale the monitor to fit the window in integer steps                                         |
+| -no-scaletonearest           |                                                                              | Do not scale the monitor to fit the window in integer steps (default)                                         |
 
 ### Keys
 
