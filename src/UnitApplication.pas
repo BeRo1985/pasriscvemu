@@ -56,7 +56,7 @@ type TApplication=class(TpvApplication)
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
        fSoundMode:TPasRISCV.TSoundMode;
-       fVirtIONetBackend:TPasRISCV.TVirtIONetBackend;
+       fNetworkMode:TPasRISCV.TNetworkMode;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -93,7 +93,7 @@ type TApplication=class(TpvApplication)
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
        property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
-       property VirtIONetBackend:TPasRISCV.TVirtIONetBackend read fVirtIONetBackend write fVirtIONetBackend;
+       property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
      end;
 
 var Application:TApplication=nil;
@@ -233,7 +233,7 @@ begin
 
  fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
 
- fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.NAT;
+ fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
 
  Index:=1;
  Count:=ParamCount;
@@ -379,11 +379,11 @@ begin
      inc(Index);
     end; 
    end else if Parameter='tunnet' then begin
-    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.TUN;
+    fNetworkMode:=TPasRISCV.TNetworkMode.TUN;
    end else if Parameter='natnet' then begin
-    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.NAT;
+    fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
    end else if Parameter='nonet' then begin
-    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.Isolated;
+    fNetworkMode:=TPasRISCV.TNetworkMode.Isolated;
    end else begin
     // Ignoring
    end;
