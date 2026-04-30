@@ -382,6 +382,8 @@ begin
     fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.TUN;
    end else if Parameter='natnet' then begin
     fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.NAT;
+   end else if Parameter='nonet' then begin
+    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.Isolated;
    end else begin
     // Ignoring
    end;

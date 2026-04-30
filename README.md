@@ -57,6 +57,7 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -soundmode [mode]             | `virtio`                                                                     | Sound mode: `virtio`, `fm801`, `cmi8738` (also `cmipci`, `cmi`), `hda` |
 | -natnet                       |                                                                              | Use userland NAT networking backend for VirtIO Net (default, no root/TAP needed) |
 | -tunnet                       |                                                                              | Use TUN/TAP networking backend for VirtIO Net (requires a TUN/TAP device) |
+| -nonet                        |                                                                              | Use isolated network mode: guest gets DHCP/ARP/ICMP locally, but no external access |
 | -centered                     |                                                                              | Center the monitor on the screen (default)                                            |
 | -no-centered                  |                                                                              | Do not center the monitor on the screen (default)                                            |
 | -centertonearestpixel         |                                                                              | Center the monitor to the nearest pixel (no fractional offset)                        |
