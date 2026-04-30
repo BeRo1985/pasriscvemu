@@ -134,7 +134,8 @@ begin
  fMachineConfiguration.RTCMode:=Application.RTCMode;
  fMachineConfiguration.I2CMode:=Application.I2CMode;
  fMachineConfiguration.SoundMode:=Application.SoundMode;
- fMachineConfiguration.NetworkMode:=Application.NetworkMode;  
+ fMachineConfiguration.NetworkMode:=Application.NetworkMode;
+ fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;

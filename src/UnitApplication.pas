@@ -57,6 +57,7 @@ type TApplication=class(TpvApplication)
        fI2CMode:TPasRISCV.TI2CMode;
        fSoundMode:TPasRISCV.TSoundMode;
        fNetworkMode:TPasRISCV.TNetworkMode;
+       fNetworkHostForwards:TPasRISCVRawByteString;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -94,6 +95,7 @@ type TApplication=class(TpvApplication)
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
        property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
        property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
+       property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
      end;
 
 var Application:TApplication=nil;
@@ -234,6 +236,8 @@ begin
  fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
 
  fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
+
+ fNetworkHostForwards:='';
 
  Index:=1;
  Count:=ParamCount;
@@ -384,6 +388,14 @@ begin
     fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
    end else if Parameter='nonet' then begin
     fNetworkMode:=TPasRISCV.TNetworkMode.Isolated;
+   end else if Parameter='hostfwd' then begin
+    if Index<=Count then begin
+     if Length(fNetworkHostForwards)>0 then begin
+      fNetworkHostForwards:=fNetworkHostForwards+';';
+     end;
+     fNetworkHostForwards:=fNetworkHostForwards+TPasRISCVRawByteString(ParamStr(Index));
+     inc(Index);
+    end;
    end else begin
     // Ignoring
    end;
