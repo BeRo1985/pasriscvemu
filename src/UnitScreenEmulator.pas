@@ -133,7 +133,8 @@ begin
  fMachineConfiguration.DisplayMode:=Application.DisplayMode;
  fMachineConfiguration.RTCMode:=Application.RTCMode;
  fMachineConfiguration.I2CMode:=Application.I2CMode;
- fMachineConfiguration.SoundMode:=Application.SoundMode;  
+ fMachineConfiguration.SoundMode:=Application.SoundMode;
+ fMachineConfiguration.VirtIONetBackend:=Application.VirtIONetBackend;  
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;
@@ -213,6 +214,9 @@ begin
  fRenderer.Flags:=[];
  if Application.Centered then begin
   fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.Centered];
+ end;
+ if Application.CenterToNearestPixel then begin
+  fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.CenterToNearestPixel];
  end;
  if Application.Scaled then begin
   fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.Scaled];

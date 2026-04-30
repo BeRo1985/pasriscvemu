@@ -55,8 +55,12 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -rtc [mode]                   | `goldfish`                                                                   | RTC mode: `goldfish`, `ds1742`, `ds1307`, or `virtio`          |
 | -i2c [mode]                   | `designware`                                                                 | I2C mode: `opencores` (or `oc`), `designware` (or `dw`)        |
 | -soundmode [mode]             | `virtio`                                                                     | Sound mode: `virtio`, `fm801`, `cmi8738` (also `cmipci`, `cmi`), `hda` |
+| -natnet                       |                                                                              | Use userland NAT networking backend for VirtIO Net (default, no root/TAP needed) |
+| -tunnet                       |                                                                              | Use TUN/TAP networking backend for VirtIO Net (requires a TUN/TAP device) |
 | -centered                     |                                                                              | Center the monitor on the screen (default)                                            |
 | -no-centered                  |                                                                              | Do not center the monitor on the screen (default)                                            |
+| -centertonearestpixel         |                                                                              | Center the monitor to the nearest pixel (no fractional offset)                        |
+| -no-centertonearestpixel      |                                                                              | Do not center the monitor to the nearest pixel (default)                              |
 | -scaled                       |                                                                              | Scale the monitor to fit the window (default)                                            |
 | -no-scaled                    |                                                                              | Do not scale the monitor to fit the window                                                   |
 | -scaletonearest              |                                                                              | Scale the monitor to fit the window in integer steps                                         |

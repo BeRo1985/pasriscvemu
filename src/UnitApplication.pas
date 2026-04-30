@@ -49,12 +49,14 @@ type TApplication=class(TpvApplication)
        fAIA:Boolean;
        fSVVPTC:Boolean;
        fCentered:Boolean;
+       fCenterToNearestPixel:Boolean;
        fScaled:Boolean;
        fScaleToNearest:Boolean;
        fDisplayMode:TPasRISCV.TDisplayMode;
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
        fSoundMode:TPasRISCV.TSoundMode;
+       fVirtIONetBackend:TPasRISCV.TVirtIONetBackend;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -84,12 +86,14 @@ type TApplication=class(TpvApplication)
        property AIA:Boolean read fAIA write fAIA;
        property SVVPTC:Boolean read fSVVPTC write fSVVPTC;
        property Centered:Boolean read fCentered write fCentered;
+       property CenterToNearestPixel:Boolean read fCenterToNearestPixel write fCenterToNearestPixel;
        property Scaled:Boolean read fScaled write fScaled;
        property ScaleToNearest:Boolean read fScaleToNearest write fScaleToNearest;
        property DisplayMode:TPasRISCV.TDisplayMode read fDisplayMode write fDisplayMode;
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
        property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
+       property VirtIONetBackend:TPasRISCV.TVirtIONetBackend read fVirtIONetBackend write fVirtIONetBackend;
      end;
 
 var Application:TApplication=nil;
@@ -215,6 +219,8 @@ begin
 
  fCentered:=true;
 
+ fCenterToNearestPixel:=false;
+
  fScaled:=true;
 
  fScaleToNearest:=false;
@@ -226,6 +232,8 @@ begin
  fI2CMode:=TPasRISCV.TI2CMode.DesignWare;
 
  fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
+
+ fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.NAT;
 
  Index:=1;
  Count:=ParamCount;
@@ -306,6 +314,10 @@ begin
     fCentered:=true;
    end else if Parameter='no-centered' then begin
     fCentered:=false;
+   end else if Parameter='centertonearestpixel' then begin
+    fCenterToNearestPixel:=true;
+   end else if Parameter='no-centertonearestpixel' then begin
+    fCenterToNearestPixel:=false;
    end else if Parameter='scaled' then begin
     fScaled:=true;
    end else if Parameter='no-scaled' then begin
@@ -366,6 +378,10 @@ begin
      end;
      inc(Index);
     end; 
+   end else if Parameter='tunnet' then begin
+    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.TUN;
+   end else if Parameter='natnet' then begin
+    fVirtIONetBackend:=TPasRISCV.TVirtIONetBackend.NAT;
    end else begin
     // Ignoring
    end;
