@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> The primary repository has moved to [git.rosseaux.net/BeRo1985/pasriscvemu](https://git.rosseaux.net/BeRo1985/pasriscvemu).
+> This GitHub repository is kept up-to-date via push mirroring.
+
 # pasriscvemu
 
 This is the PasVulkan-based emulator frontend for the PasRISCV RV64GC RISCV-V emulator.
