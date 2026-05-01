@@ -58,6 +58,8 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -natnet                       |                                                                              | Use userland NAT networking backend for VirtIO Net (default, no root/TAP needed) |
 | -tunnet                       |                                                                              | Use TUN/TAP networking backend for VirtIO Net (requires a TUN/TAP device) |
 | -nonet                        |                                                                              | Use isolated network mode: guest gets DHCP/ARP/ICMP locally, but no external access |
+| -no-ipv6                      |                                                                              | Disable IPv6 NAT (ICMPv6/UDPv6/TCPv6 and router advertisements are suppressed) |
+| -ipv6                         |                                                                              | Enable IPv6 NAT (default)                                      |
 | -hostfwd [spec]               |                                                                              | Add a NAT port forward (requires `-natnet`). Format: `tcp\|udp::hostport-[guestip]:guestport`, e.g. `-hostfwd tcp::2222-:22`. Can be repeated. |
 | -centered                     |                                                                              | Center the monitor on the screen (default)                                            |
 | -no-centered                  |                                                                              | Do not center the monitor on the screen (default)                                            |

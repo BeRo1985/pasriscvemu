@@ -58,6 +58,7 @@ type TApplication=class(TpvApplication)
        fSoundMode:TPasRISCV.TSoundMode;
        fNetworkMode:TPasRISCV.TNetworkMode;
        fNetworkHostForwards:TPasRISCVRawByteString;
+       fNATIPv6Enabled:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -96,6 +97,7 @@ type TApplication=class(TpvApplication)
        property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
        property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
+       property NATIPv6Enabled:Boolean read fNATIPv6Enabled write fNATIPv6Enabled;
      end;
 
 var Application:TApplication=nil;
@@ -238,6 +240,8 @@ begin
  fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
 
  fNetworkHostForwards:='';
+
+ fNATIPv6Enabled:=true;
 
  Index:=1;
  Count:=ParamCount;
@@ -388,6 +392,10 @@ begin
     fNetworkMode:=TPasRISCV.TNetworkMode.NAT;
    end else if Parameter='nonet' then begin
     fNetworkMode:=TPasRISCV.TNetworkMode.Isolated;
+   end else if Parameter='no-ipv6' then begin
+    fNATIPv6Enabled:=false;
+   end else if Parameter='ipv6' then begin
+    fNATIPv6Enabled:=true;
    end else if Parameter='hostfwd' then begin
     if Index<=Count then begin
      if Length(fNetworkHostForwards)>0 then begin
