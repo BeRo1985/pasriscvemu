@@ -136,7 +136,7 @@ begin
  fMachineConfiguration.SoundMode:=Application.SoundMode;
  fMachineConfiguration.NetworkMode:=Application.NetworkMode;
  fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
- fMachineConfiguration.NATIPv6Enabled:=Application.NATIPv6Enabled;
+ fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;
