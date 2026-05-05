@@ -435,6 +435,7 @@ begin
  AndroidSeparateMouseAndTouch:=true;
  UseAudio:=true;
  Blocking:=true;
+ StayActiveRegardlessOfVisibility:=true;
  Width:=1280;
  Height:=800;
 //DesiredCountSwapChainImages:=2;
@@ -444,6 +445,7 @@ begin
  PresentFrameLatencyMode:=TpvApplicationPresentFrameLatencyMode.CombinedWait;
  FramePacingMode:=TpvApplicationFramePacingMode.Auto;
  FramePacingStrategy:=TpvApplicationFramePacingStrategy.DeviationCompensation;
+ LowLatencyMode:=TpvApplicationLowLatencyMode.None;
  VulkanAPIVersion:=VK_API_VERSION_1_0;
 end;
 
