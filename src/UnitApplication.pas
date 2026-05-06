@@ -59,6 +59,7 @@ type TApplication=class(TpvApplication)
        fNetworkMode:TPasRISCV.TNetworkMode;
        fNetworkHostForwards:TPasRISCVRawByteString;
        fUserModeIPv6Enabled:Boolean;
+       fStrictCompliantFPU:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -98,6 +99,7 @@ type TApplication=class(TpvApplication)
        property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
+       property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
      end;
 
 var Application:TApplication=nil;
@@ -242,6 +244,8 @@ begin
  fNetworkHostForwards:='';
 
  fUserModeIPv6Enabled:=true;
+
+ fStrictCompliantFPU:=false;
 
  Index:=1;
  Count:=ParamCount;
@@ -398,6 +402,10 @@ begin
     fUserModeIPv6Enabled:=false;
    end else if Parameter='ipv6' then begin
     fUserModeIPv6Enabled:=true;
+   end else if Parameter='strictcompliantfpu' then begin
+    fStrictCompliantFPU:=true;
+   end else if Parameter='no-strictcompliantfpu' then begin
+    fStrictCompliantFPU:=false;
    end else if Parameter='hostfwd' then begin
     if Index<=Count then begin
      if Length(fNetworkHostForwards)>0 then begin

@@ -73,6 +73,8 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -no-scaled                    |                                                                              | Do not scale the monitor to fit the window                                                   |
 | -scaletonearest              |                                                                              | Scale the monitor to fit the window in integer steps                                         |
 | -no-scaletonearest           |                                                                              | Do not scale the monitor to fit the window in integer steps (default)                                         |
+| -strictcompliantfpu          |                                                                              | Enable strict IEEE 754-compliant software FPU (slower, but fully spec-correct)                                |
+| -no-strictcompliantfpu       |                                                                              | Disable strict IEEE 754-compliant software FPU, use host FPU (default)                                        |
 
 ### Keys
 
