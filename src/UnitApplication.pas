@@ -31,7 +31,7 @@ uses SysUtils,
      PasVulkan.Application,
      PasRISCV;
 
-const ApplicationTag='riscvemu';      
+const ApplicationTag='riscvemu';
 
 type TApplication=class(TpvApplication)
       public
@@ -60,6 +60,7 @@ type TApplication=class(TpvApplication)
        fNetworkHostForwards:TPasRISCVRawByteString;
        fUserModeIPv6Enabled:Boolean;
        fStrictCompliantFPU:Boolean;
+       fVirtIOGPUVirGL:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -100,6 +101,7 @@ type TApplication=class(TpvApplication)
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
        property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
+       property VirtIOGPUVirGL:Boolean read fVirtIOGPUVirGL write fVirtIOGPUVirGL;
      end;
 
 var Application:TApplication=nil;
@@ -112,10 +114,10 @@ uses UnitScreenEmulator;
 function AmountToSize(const aAmount:TpvRawByteString;const aDefault:TpvUInt64):TpvUInt64;
 var Index:TpvSizeInt;
     Value,Digits,FracValue,FracDigits,FracTenPower,Factor:TpvUInt64;
-    UnitString:TpvRawByteString;    
+    UnitString:TpvRawByteString;
 begin
 
- Index:=1; 
+ Index:=1;
 
  // Skip whitespace
  while (Index<=length(aAmount)) and (aAmount[Index] in [#1..#32]) do begin
@@ -163,7 +165,7 @@ begin
  if UnitString='kb' then begin
   Factor:=TpvUInt64(1000);
  end else if UnitString='kib' then begin
-  Factor:=TpvUInt64(1024); 
+  Factor:=TpvUInt64(1024);
  end else if UnitString='mb' then begin
   Factor:=TpvUInt64(1000000);
  end else if UnitString='mib' then begin
@@ -193,10 +195,10 @@ end;
 
 constructor TApplication.Create;
 var Index,Count:TpvSizeInt;
-    Parameter,Value:String; 
+    Parameter,Value:String;
 begin
  inherited Create;
- 
+
  Application:=self;
 
  fDebuggerPort:=-1; // -1 means no debugger
@@ -246,6 +248,8 @@ begin
  fUserModeIPv6Enabled:=true;
 
  fStrictCompliantFPU:=false;
+
+ fVirtIOGPUVirGL:=false;
 
  Index:=1;
  Count:=ParamCount;
@@ -386,10 +390,10 @@ begin
      end else if (Value='cmi8738') or (Value='cmipci') or (Value='cmi') then begin
       fSoundMode:=TPasRISCV.TSoundMode.CMI8738;
      end else if Value='hda' then begin
-      fSoundMode:=TPasRISCV.TSoundMode.HDA; 
+      fSoundMode:=TPasRISCV.TSoundMode.HDA;
      end;
      inc(Index);
-    end; 
+    end;
    end else if Parameter='tunnet' then begin
     fNetworkMode:=TPasRISCV.TNetworkMode.TUN;
    end else if (Parameter='natnet') or (Parameter='nat') or
@@ -406,6 +410,10 @@ begin
     fStrictCompliantFPU:=true;
    end else if Parameter='no-strictcompliantfpu' then begin
     fStrictCompliantFPU:=false;
+   end else if Parameter='virgl' then begin
+    fVirtIOGPUVirGL:=true;
+   end else if Parameter='no-virgl' then begin
+    fVirtIOGPUVirGL:=false;
    end else if Parameter='hostfwd' then begin
     if Index<=Count then begin
      if Length(fNetworkHostForwards)>0 then begin

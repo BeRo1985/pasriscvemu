@@ -66,6 +66,8 @@ end;
 
  CustomOptions += &apos; -dPasVulkanPasMP&apos;;
 
+ CustomOptions += &apos; -dPasRISCVVirtIOGPUVulkanVenus&apos;;
+
 // example for adding linker options on Mac OS X
 //if TargetOS=&apos;darwin&apos; then
 //  LinkerOptions := &apos; -framework OpenGL&apos;;

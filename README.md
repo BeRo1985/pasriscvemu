@@ -75,6 +75,8 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -no-scaletonearest           |                                                                              | Do not scale the monitor to fit the window in integer steps (default)                                         |
 | -strictcompliantfpu          |                                                                              | Enable strict IEEE 754-compliant software FPU (slower, but fully spec-correct)                                |
 | -no-strictcompliantfpu       |                                                                              | Disable strict IEEE 754-compliant software FPU, use host FPU (default)                                        |
+| -virgl                       |                                                                              | Enable VirtIO-GPU 3D/VirGL acceleration (requires libvirglrenderer; needs `-display virtiogpu`)                |
+| -no-virgl                    |                                                                              | Disable VirtIO-GPU 3D/VirGL acceleration (default)                                                             |
 
 ### Keys
 

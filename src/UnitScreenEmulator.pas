@@ -138,6 +138,7 @@ begin
  fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
  fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;
  fMachineConfiguration.StrictCompliantFPU:=Application.StrictCompliantFPU;
+ fMachineConfiguration.VirtIOGPUVirGL:=Application.VirtIOGPUVirGL;
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;
