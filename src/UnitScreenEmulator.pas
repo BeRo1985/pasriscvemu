@@ -138,6 +138,7 @@ begin
  fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
  fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;
  fMachineConfiguration.StrictCompliantFPU:=Application.StrictCompliantFPU;
+ fMachineConfiguration.FastRMMFixupEnabled:=Application.FastRMMFixupEnabled;
  fMachineConfiguration.VirtIOGPUVirGL:=Application.VirtIOGPUVirGL;
 end;
 

@@ -60,6 +60,7 @@ type TApplication=class(TpvApplication)
        fNetworkHostForwards:TPasRISCVRawByteString;
        fUserModeIPv6Enabled:Boolean;
        fStrictCompliantFPU:Boolean;
+       fFastRMMFixupEnabled:Boolean;
        fVirtIOGPUVirGL:Boolean;
       public
        constructor Create; override;
@@ -101,6 +102,7 @@ type TApplication=class(TpvApplication)
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
        property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
+       property FastRMMFixupEnabled:Boolean read fFastRMMFixupEnabled write fFastRMMFixupEnabled;
        property VirtIOGPUVirGL:Boolean read fVirtIOGPUVirGL write fVirtIOGPUVirGL;
      end;
 
@@ -248,6 +250,8 @@ begin
  fUserModeIPv6Enabled:=true;
 
  fStrictCompliantFPU:=false;
+
+ fFastRMMFixupEnabled:=true;
 
  fVirtIOGPUVirGL:=false;
 
@@ -410,6 +414,10 @@ begin
     fStrictCompliantFPU:=true;
    end else if Parameter='no-strictcompliantfpu' then begin
     fStrictCompliantFPU:=false;
+   end else if Parameter='fastrmmfixup' then begin
+    fFastRMMFixupEnabled:=true;
+   end else if Parameter='no-fastrmmfixup' then begin
+    fFastRMMFixupEnabled:=false;
    end else if Parameter='virgl' then begin
     fVirtIOGPUVirGL:=true;
    end else if Parameter='no-virgl' then begin
