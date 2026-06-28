@@ -140,6 +140,7 @@ begin
  fMachineConfiguration.StrictCompliantFPU:=Application.StrictCompliantFPU;
  fMachineConfiguration.FastRMMFixupEnabled:=Application.FastRMMFixupEnabled;
  fMachineConfiguration.VirtIOGPUVirGL:=Application.VirtIOGPUVirGL;
+ fMachineConfiguration.JITEnabled:=Application.JITEnabled;
 end;
 
 function TMachineInstance.GetBIOSFileName:TpvRawByteString;

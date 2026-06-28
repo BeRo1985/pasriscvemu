@@ -77,6 +77,8 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -no-strictcompliantfpu       |                                                                              | Disable strict IEEE 754-compliant software FPU, use host FPU (default)                                        |
 | -virgl                       |                                                                              | Enable VirtIO-GPU 3D/VirGL acceleration (requires libvirglrenderer; needs `-display virtiogpu`)                |
 | -no-virgl                    |                                                                              | Disable VirtIO-GPU 3D/VirGL acceleration (default)                                                             |
+| -jit                         |                                                                              | Enable just-in-time compiler (default) |
+| -no-jit                      |                                                                              | Disable just-in-time compiler |
 
 ### Keys
 

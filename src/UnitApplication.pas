@@ -62,6 +62,7 @@ type TApplication=class(TpvApplication)
        fStrictCompliantFPU:Boolean;
        fFastRMMFixupEnabled:Boolean;
        fVirtIOGPUVirGL:Boolean;
+       fJITEnabled:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -104,6 +105,7 @@ type TApplication=class(TpvApplication)
        property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
        property FastRMMFixupEnabled:Boolean read fFastRMMFixupEnabled write fFastRMMFixupEnabled;
        property VirtIOGPUVirGL:Boolean read fVirtIOGPUVirGL write fVirtIOGPUVirGL;
+       property JITEnabled:Boolean read fJITEnabled write fJITEnabled;
      end;
 
 var Application:TApplication=nil;
@@ -254,6 +256,8 @@ begin
  fFastRMMFixupEnabled:=true;
 
  fVirtIOGPUVirGL:=false;
+
+ fJITEnabled:=true;
 
  Index:=1;
  Count:=ParamCount;
@@ -422,6 +426,10 @@ begin
     fVirtIOGPUVirGL:=true;
    end else if Parameter='no-virgl' then begin
     fVirtIOGPUVirGL:=false;
+   end else if Parameter='jit' then begin
+    fJITEnabled:=true;
+   end else if Parameter='no-jit' then begin
+    fJITEnabled:=false;
    end else if Parameter='hostfwd' then begin
     if Index<=Count then begin
      if Length(fNetworkHostForwards)>0 then begin
