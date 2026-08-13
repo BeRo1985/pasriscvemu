@@ -71,14 +71,16 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -no-centertonearestpixel      |                                                                              | Do not center the monitor to the nearest pixel (default)                              |
 | -scaled                       |                                                                              | Scale the monitor to fit the window (default)                                            |
 | -no-scaled                    |                                                                              | Do not scale the monitor to fit the window                                                   |
-| -scaletonearest              |                                                                              | Scale the monitor to fit the window in integer steps                                         |
-| -no-scaletonearest           |                                                                              | Do not scale the monitor to fit the window in integer steps (default)                                         |
-| -strictcompliantfpu          |                                                                              | Enable strict IEEE 754-compliant software FPU (slower, but fully spec-correct)                                |
-| -no-strictcompliantfpu       |                                                                              | Disable strict IEEE 754-compliant software FPU, use host FPU (default)                                        |
-| -virgl                       |                                                                              | Enable VirtIO-GPU 3D/VirGL acceleration (requires libvirglrenderer; needs `-display virtiogpu`)                |
-| -no-virgl                    |                                                                              | Disable VirtIO-GPU 3D/VirGL acceleration (default)                                                             |
-| -jit                         |                                                                              | Enable just-in-time compiler (default) |
-| -no-jit                      |                                                                              | Disable just-in-time compiler |
+| -scaletonearest               |                                                                              | Scale the monitor to fit the window in integer steps                                         |
+| -no-scaletonearest            |                                                                              | Do not scale the monitor to fit the window in integer steps (default)                                         |
+| -strictcompliantfpu           |                                                                              | Enable strict IEEE 754-compliant software FPU (slower, but fully spec-correct)                                |
+| -no-strictcompliantfpu        |                                                                              | Disable strict IEEE 754-compliant software FPU, use host FPU (default)                                        |
+| -virgl                        |                                                                              | Enable VirtIO-GPU 3D/VirGL acceleration (requires libvirglrenderer; needs `-display virtiogpu`)                |
+| -no-virgl                     |                                                                              | Disable VirtIO-GPU 3D/VirGL acceleration (default)                                                             |
+| -jit                          |                                                                              | Enable just-in-time compiler (default) |
+| -no-jit                       |                                                                              | Disable just-in-time compiler |
+| -console-output               |                                                                              | Serial console output |
+| -no-console-output            |                                                                              | No serial console output |
 
 ### Keys
 
