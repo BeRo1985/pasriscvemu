@@ -230,6 +230,9 @@ begin
  if Application.ScaleToNearest then begin
   fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.ScaleToNearest];
  end;
+ if Application.WriteToConsoleOutput then begin
+  fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.WriteToConsoleOutput];
+ end;
 
  fRenderer.CreateVulkanResources(pvApplication.VulkanDevice);
 

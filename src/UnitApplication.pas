@@ -46,6 +46,7 @@ type TApplication=class(TpvApplication)
        fVirtIOBlockImageFileName:TpvUTF8String;
        fNVMeImageFileName:TpvUTF8String;
        fBootArguments:TpvUTF8String;
+       fWriteToConsoleOutput:Boolean;
        fAIA:Boolean;
        fSVVPTC:Boolean;
        fCentered:Boolean;
@@ -89,6 +90,7 @@ type TApplication=class(TpvApplication)
        property VirtIOBlockImageFileName:TpvUTF8String read fVirtIOBlockImageFileName write fVirtIOBlockImageFileName;
        property NVMeImageFileName:TpvUTF8String read fNVMeImageFileName write fNVMeImageFileName;
        property BootArguments:TpvUTF8String read fBootArguments write fBootArguments;
+       property WriteToConsoleOutput:Boolean read fWriteToConsoleOutput write fWriteToConsoleOutput;
        property AIA:Boolean read fAIA write fAIA;
        property SVVPTC:Boolean read fSVVPTC write fSVVPTC;
        property Centered:Boolean read fCentered write fCentered;
@@ -225,6 +227,8 @@ begin
 
  fBootArguments:='root=/dev/mem rw earlyprintk console=$LINUXUART$ console=tty0 earlycon=sbi';
 
+ fWriteToConsoleOutput:=false;
+
  fAIA:=false;
 
  fSVVPTC:=false;
@@ -326,6 +330,10 @@ begin
      fBootArguments:=ParamStr(Index);
      inc(Index);
     end;
+   end else if Parameter='console-output' then begin
+    fWriteToConsoleOutput:=true;
+   end else if Parameter='no-console-output' then begin
+    fWriteToConsoleOutput:=false;
    end else if Parameter='aia' then begin
     fAIA:=true;
    end else if Parameter='no-aia' then begin
