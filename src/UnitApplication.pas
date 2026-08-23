@@ -62,8 +62,11 @@ type TApplication=class(TpvApplication)
        fUserModeIPv6Enabled:Boolean;
        fStrictCompliantFPU:Boolean;
        fFastRMMFixupEnabled:Boolean;
+       fJITFPUInvalidFlagEnabled:Boolean;
        fVirtIOGPUVirGL:Boolean;
        fJITEnabled:Boolean;
+       fConsolePort:TpvInt32;
+       fConsoleListenAny:Boolean;
       public
        constructor Create; override;
        destructor Destroy; override;
@@ -106,8 +109,11 @@ type TApplication=class(TpvApplication)
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
        property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
        property FastRMMFixupEnabled:Boolean read fFastRMMFixupEnabled write fFastRMMFixupEnabled;
+       property JITFPUInvalidFlagEnabled:Boolean read fJITFPUInvalidFlagEnabled write fJITFPUInvalidFlagEnabled;
        property VirtIOGPUVirGL:Boolean read fVirtIOGPUVirGL write fVirtIOGPUVirGL;
        property JITEnabled:Boolean read fJITEnabled write fJITEnabled;
+       property ConsolePort:TpvInt32 read fConsolePort write fConsolePort;
+       property ConsoleListenAny:Boolean read fConsoleListenAny write fConsoleListenAny;
      end;
 
 var Application:TApplication=nil;
@@ -259,9 +265,18 @@ begin
 
  fFastRMMFixupEnabled:=true;
 
+ // Off, like PasRISCV's own default: without it the JIT skips NV for invalid FP
+ // operations, so flt/fle with a NaN operand leave fflags untouched even though
+ // the interpreter sets it. Turn it on to get that RISC-V behaviour under the JIT.
+ fJITFPUInvalidFlagEnabled:=false;
+
  fVirtIOGPUVirGL:=false;
 
  fJITEnabled:=true;
+
+ // off unless a port is given: it is an unauthenticated shell on a socket
+ fConsolePort:=0;
+ fConsoleListenAny:=false;
 
  Index:=1;
  Count:=ParamCount;
@@ -430,6 +445,10 @@ begin
     fFastRMMFixupEnabled:=true;
    end else if Parameter='no-fastrmmfixup' then begin
     fFastRMMFixupEnabled:=false;
+   end else if (Parameter='jitfpuinvalidflag') or (Parameter='jitnv') then begin
+    fJITFPUInvalidFlagEnabled:=true;
+   end else if (Parameter='no-jitfpuinvalidflag') or (Parameter='no-jitnv') then begin
+    fJITFPUInvalidFlagEnabled:=false;
    end else if Parameter='virgl' then begin
     fVirtIOGPUVirGL:=true;
    end else if Parameter='no-virgl' then begin
@@ -438,6 +457,22 @@ begin
     fJITEnabled:=true;
    end else if Parameter='no-jit' then begin
     fJITEnabled:=false;
+   end else if (Parameter='console-port') or (Parameter='tty-port') or
+               (Parameter='serial-port') then begin
+    // Exposes the guest's serial console on a TCP port, so it can be driven
+    // with "nc 127.0.0.1 <port>" from outside the emulator window.
+    if Index<=Count then begin
+     fConsolePort:=StrToIntDef(ParamStr(Index),0);
+     inc(Index);
+    end;
+   end else if Parameter='no-console-port' then begin
+    fConsolePort:=0;
+   end else if (Parameter='console-listen-any') or (Parameter='console-any') then begin
+    // Binds 0.0.0.0 instead of 127.0.0.1. Only do this on a trusted network,
+    // it hands a root shell to anyone who can reach the port.
+    fConsoleListenAny:=true;
+   end else if Parameter='console-listen-local' then begin
+    fConsoleListenAny:=false;
    end else if Parameter='hostfwd' then begin
     if Index<=Count then begin
      if Length(fNetworkHostForwards)>0 then begin

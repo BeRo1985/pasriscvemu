@@ -81,6 +81,7 @@ Just run the `pasriscvemu` executable in the `bin` directory. Otherwise look bel
 | -no-jit                       |                                                                              | Disable just-in-time compiler |
 | -console-output               |                                                                              | Serial console output |
 | -no-console-output            |                                                                              | No serial console output |
+| -console-port [port]          |                                                                              | Serial console TCP port |
 
 ### Keys
 

@@ -139,6 +139,7 @@ begin
  fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;
  fMachineConfiguration.StrictCompliantFPU:=Application.StrictCompliantFPU;
  fMachineConfiguration.FastRMMFixupEnabled:=Application.FastRMMFixupEnabled;
+ fMachineConfiguration.JITFPUInvalidFlagEnabled:=Application.JITFPUInvalidFlagEnabled;
  fMachineConfiguration.VirtIOGPUVirGL:=Application.VirtIOGPUVirGL;
  fMachineConfiguration.JITEnabled:=Application.JITEnabled;
 end;
@@ -230,6 +231,9 @@ begin
  if Application.ScaleToNearest then begin
   fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.ScaleToNearest];
  end;
+ fRenderer.ConsoleServerPort:=Application.ConsolePort;
+ fRenderer.ConsoleServerLocalOnly:=not Application.ConsoleListenAny;
+
  if Application.WriteToConsoleOutput then begin
   fRenderer.Flags:=fRenderer.Flags+[TpvPasRISCVEmulatorRenderer.TFlag.WriteToConsoleOutput];
  end;
