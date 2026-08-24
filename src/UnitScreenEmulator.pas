@@ -137,6 +137,7 @@ begin
  fMachineConfiguration.NetworkMode:=Application.NetworkMode;
  fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
  fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;
+ fMachineConfiguration.UserModeTracerouteEnabled:=Application.UserModeTracerouteEnabled;
  fMachineConfiguration.StrictCompliantFPU:=Application.StrictCompliantFPU;
  fMachineConfiguration.FastRMMFixupEnabled:=Application.FastRMMFixupEnabled;
  fMachineConfiguration.JITFPUInvalidFlagEnabled:=Application.JITFPUInvalidFlagEnabled;

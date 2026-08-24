@@ -60,6 +60,7 @@ type TApplication=class(TpvApplication)
        fNetworkMode:TPasRISCV.TNetworkMode;
        fNetworkHostForwards:TPasRISCVRawByteString;
        fUserModeIPv6Enabled:Boolean;
+       fUserModeTracerouteEnabled:Boolean;
        fStrictCompliantFPU:Boolean;
        fFastRMMFixupEnabled:Boolean;
        fJITFPUInvalidFlagEnabled:Boolean;
@@ -107,6 +108,7 @@ type TApplication=class(TpvApplication)
        property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
+       property UserModeTracerouteEnabled:Boolean read fUserModeTracerouteEnabled write fUserModeTracerouteEnabled;
        property StrictCompliantFPU:Boolean read fStrictCompliantFPU write fStrictCompliantFPU;
        property FastRMMFixupEnabled:Boolean read fFastRMMFixupEnabled write fFastRMMFixupEnabled;
        property JITFPUInvalidFlagEnabled:Boolean read fJITFPUInvalidFlagEnabled write fJITFPUInvalidFlagEnabled;
@@ -260,6 +262,11 @@ begin
  fNetworkHostForwards:='';
 
  fUserModeIPv6Enabled:=true;
+
+ // Off by default. The user mode NAT terminates every connection at the host and
+ // has no hops of its own; with this on it answers the TTL ladder as the gateway,
+ // which is what lets traceroute show the gateway and then the destination.
+ fUserModeTracerouteEnabled:=false;
 
  fStrictCompliantFPU:=false;
 
@@ -437,6 +444,10 @@ begin
     fUserModeIPv6Enabled:=false;
    end else if Parameter='ipv6' then begin
     fUserModeIPv6Enabled:=true;
+   end else if (Parameter='traceroute') or (Parameter='usermodetraceroute') then begin
+    fUserModeTracerouteEnabled:=true;
+   end else if (Parameter='no-traceroute') or (Parameter='no-usermodetraceroute') then begin
+    fUserModeTracerouteEnabled:=false;
    end else if Parameter='strictcompliantfpu' then begin
     fStrictCompliantFPU:=true;
    end else if Parameter='no-strictcompliantfpu' then begin
