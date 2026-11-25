@@ -134,6 +134,7 @@ begin
  fMachineConfiguration.RTCMode:=Application.RTCMode;
  fMachineConfiguration.I2CMode:=Application.I2CMode;
  fMachineConfiguration.SoundMode:=Application.SoundMode;
+ fMachineConfiguration.SoundSuppressSilentPeriodInterrupts:=Application.SoundSuppressSilentPeriodInterrupts;
  fMachineConfiguration.NetworkMode:=Application.NetworkMode;
  fMachineConfiguration.NetworkHostForwards:=Application.NetworkHostForwards;
  fMachineConfiguration.UserModeIPv6Enabled:=Application.UserModeIPv6Enabled;

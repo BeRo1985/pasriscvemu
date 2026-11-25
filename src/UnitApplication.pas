@@ -57,6 +57,7 @@ type TApplication=class(TpvApplication)
        fRTCMode:TPasRISCV.TRTCMode;
        fI2CMode:TPasRISCV.TI2CMode;
        fSoundMode:TPasRISCV.TSoundMode;
+       fSoundSuppressSilentPeriodInterrupts:Boolean;
        fNetworkMode:TPasRISCV.TNetworkMode;
        fNetworkHostForwards:TPasRISCVRawByteString;
        fUserModeIPv6Enabled:Boolean;
@@ -105,6 +106,7 @@ type TApplication=class(TpvApplication)
        property RTCMode:TPasRISCV.TRTCMode read fRTCMode write fRTCMode;
        property I2CMode:TPasRISCV.TI2CMode read fI2CMode write fI2CMode;
        property SoundMode:TPasRISCV.TSoundMode read fSoundMode write fSoundMode;
+       property SoundSuppressSilentPeriodInterrupts:Boolean read fSoundSuppressSilentPeriodInterrupts write fSoundSuppressSilentPeriodInterrupts;
        property NetworkMode:TPasRISCV.TNetworkMode read fNetworkMode write fNetworkMode;
        property NetworkHostForwards:TPasRISCVRawByteString read fNetworkHostForwards write fNetworkHostForwards;
        property UserModeIPv6Enabled:Boolean read fUserModeIPv6Enabled write fUserModeIPv6Enabled;
@@ -256,6 +258,10 @@ begin
  fI2CMode:=TPasRISCV.TI2CMode.DesignWare;
 
  fSoundMode:=TPasRISCV.TSoundMode.VirtIO;
+
+ // Off, like PasRISCV's own default: with it the sound devices (CMI8738, HDA, VirtIO) skip the
+ // period interrupts of silent playback periods, while keeping at least two per buffer
+ fSoundSuppressSilentPeriodInterrupts:=false;
 
  fNetworkMode:=TPasRISCV.TNetworkMode.UserMode;
 
@@ -432,6 +438,10 @@ begin
      end;
      inc(Index);
     end;
+   end else if (Parameter='suppresssilentsoundirqs') or (Parameter='silentsoundirqs') then begin
+    fSoundSuppressSilentPeriodInterrupts:=true;
+   end else if (Parameter='no-suppresssilentsoundirqs') or (Parameter='no-silentsoundirqs') then begin
+    fSoundSuppressSilentPeriodInterrupts:=false;
    end else if Parameter='tunnet' then begin
     fNetworkMode:=TPasRISCV.TNetworkMode.TUN;
    end else if (Parameter='natnet') or (Parameter='nat') or
